@@ -108,7 +108,7 @@ public class Auto {
     }
 
     public Rueda[] getRuedas() {
-        return ruedas;
+        return ( ruedas != null ) ? Arrays.copyOf(ruedas,ruedas.length) : null;
     }
 
     public void setRuedas(Rueda[] ruedas) {
