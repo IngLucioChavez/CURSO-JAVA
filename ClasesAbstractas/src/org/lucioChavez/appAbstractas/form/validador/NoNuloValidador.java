@@ -16,6 +16,6 @@ public class NoNuloValidador extends Validador{
 
     @Override
     public boolean esValido(String valor) {
-        return (mensaje != null);
+        return (valor != null);
     }
 }
