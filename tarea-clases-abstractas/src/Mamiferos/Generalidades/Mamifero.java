@@ -1,17 +1,21 @@
+package Mamiferos.Generalidades;
+
 public abstract class Mamifero {
 
-    private String habitat;
-    private Float altura;
-    private Float largo;
-    private Float peso;
-    private String nombreCientifico;
+    protected String habitat;
+    protected Float altura;
+    protected Float largo;
+    protected Float peso;
+    protected String nombreCientifico;
+    protected String formaComunicarse;
 
     public Mamifero() {
-        habitat = "";
+        habitat = "sin habitat";
         altura = 0f;
         largo = 0f;
         peso = 0f;
-        nombreCientifico = "";
+        nombreCientifico = "sin nombre cientifico";
+        formaComunicarse = "sin forma de comunicarse";
     }
 
     public abstract String comer();
@@ -57,5 +61,13 @@ public abstract class Mamifero {
 
     public void setNombreCientifico(String nombreCientifico) {
         this.nombreCientifico = nombreCientifico;
+    }
+
+    public String getFormaComunicarse() {
+        return formaComunicarse;
+    }
+
+    public void setFormaComunicarse(String formaComunicarse) {
+        this.formaComunicarse = formaComunicarse;
     }
 }
