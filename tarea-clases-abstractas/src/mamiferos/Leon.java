@@ -7,9 +7,28 @@ public class Leon extends Felino {
     private int numeroManada;
     private float potenciaRugido;
 
+    public static class Builder extends Felino.Builder<Leon.Builder>{
+
+        private int numeroManada = 0;
+        private float potenciaRugido = 0f;
+
+        public Leon.Builder numeroManada(int n){ this.numeroManada = n; return this; }
+        public Leon.Builder potenciaRugido(float p){ this.potenciaRugido = p; return this; }
+
+        @Override protected Builder self(){ return this; }
+        @Override public Leon build() { return new Leon(this); }
+
+    }
+
     public Leon(){
         numeroManada = 0;
         potenciaRugido = 0f;
+    }
+
+    private Leon(Builder b){
+        super(b);
+        this.numeroManada = b.numeroManada;
+        this.potenciaRugido = b.potenciaRugido;
     }
 
     @Override

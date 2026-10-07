@@ -6,8 +6,24 @@ public class Perro extends Canino {
 
     private float fuerzaMordida;
 
+    public static class Builder extends Canino.Builder<Perro.Builder>{
+
+        private float fuerzaMordida = 0;
+
+        public Perro.Builder fuerzaMordida(float fuerzaMordida)      { this.fuerzaMordida = fuerzaMordida; return this; }
+
+        @Override protected Perro.Builder self() { return this; }
+        @Override public Perro build()      { return new Perro(this); }
+
+    }
+
     public Perro(){
         fuerzaMordida = 0;
+    }
+
+    private Perro(Builder b){
+        super(b);
+        this.fuerzaMordida = b.fuerzaMordida;
     }
 
     public float getFuerzaMordida() {

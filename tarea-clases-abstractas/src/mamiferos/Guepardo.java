@@ -4,6 +4,19 @@ import mamiferos.tipos_mamiferos.Felino;
 
 public class Guepardo extends Felino {
 
+    public static class Builder extends Felino.Builder<Guepardo.Builder>{
+
+        @Override protected Builder self(){ return this; }
+        @Override public Guepardo build(){ return new Guepardo(this); }
+
+    }
+
+    public Guepardo(){}
+
+    private Guepardo(Builder b){
+        super(b);
+    }
+
     @Override
     public String comer() {
         return String.format("el GUEPARDO %s empieza a COMER",nombrePropio);

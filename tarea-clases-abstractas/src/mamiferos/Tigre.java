@@ -6,6 +6,22 @@ public class Tigre extends Felino {
 
     private String especie;
 
+    public static class Builder extends Felino.Builder<Tigre.Builder>{
+
+        private String especie = "sin especie";
+
+        public Tigre.Builder especie(String e){ this.especie = e; return this; }
+
+        @Override protected Tigre.Builder self(){ return this; }
+        @Override public Tigre build() { return new Tigre(this); }
+
+    }
+
+    private Tigre(Builder b){
+        super(b);
+        this.especie = b.especie;
+    }
+
     public Tigre(){
         especie = "sin especie";
     }

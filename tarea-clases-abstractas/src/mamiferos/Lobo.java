@@ -7,11 +7,29 @@ public class Lobo extends Canino {
     private int numeroCamada;
     private String especie;
 
+    public static class Builder extends Canino.Builder<Builder>{
+
+        private int numeroCamada = 0;
+        private String especie = "sin especie";
+
+        public Builder camada(int camada)      { this.numeroCamada = camada; return this; }
+        public Builder especie(String especie) { this.especie = especie; return this; }
+
+        @Override protected Builder self() { return this; }
+        @Override public Lobo build()      { return new Lobo(this); }
+
+    }
+
     public Lobo() {
         numeroCamada = 0;
         especie = "sin especie";
     }
 
+    private Lobo(Builder b) {
+        super(b);   // Canino -> Mamifero
+        this.numeroCamada = b.numeroCamada;
+        this.especie = b.especie;
+    }
 
     public String getEspecie() {
         return especie;

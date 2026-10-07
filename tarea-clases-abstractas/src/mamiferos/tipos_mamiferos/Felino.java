@@ -7,9 +7,28 @@ public abstract class Felino extends Mamifero {
     protected Float tamanioGarras;
     protected Integer velocidad;
 
+    protected abstract static class Builder<T extends Builder<T>> extends Mamifero.Builder<T>{
+
+        private Float tamanioGarras = 0f;
+        private Integer velocidad = 0;
+
+        public T tamanioGarras(Float v){ this.tamanioGarras = v; return self(); }
+        public T velocidad(Integer v){ this.velocidad = v; return self(); }
+
+        @Override
+        public abstract Felino build();
+
+    }
+
     public Felino() {
         tamanioGarras = 0f;
         velocidad = 0;
+    }
+
+    protected Felino(Builder<?> b){
+        super(b);
+        this.tamanioGarras = b.tamanioGarras;
+        this.velocidad = b.velocidad;
     }
 
     public Float getTamanioGarras() {
