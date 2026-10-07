@@ -1,4 +1,4 @@
-package Mamiferos.Generalidades;
+package mamiferos.generalidades;
 
 public abstract class Mamifero {
 
@@ -8,6 +8,7 @@ public abstract class Mamifero {
     protected Float peso;
     protected String nombreCientifico;
     protected String formaComunicarse;
+    protected String nombrePropio;
 
     public Mamifero() {
         habitat = "sin habitat";
@@ -16,12 +17,21 @@ public abstract class Mamifero {
         peso = 0f;
         nombreCientifico = "sin nombre cientifico";
         formaComunicarse = "sin forma de comunicarse";
+        nombrePropio = "sin nombre propio";
     }
 
     public abstract String comer();
     public abstract String correr();
     public abstract String dormir();
     public abstract String comunicarse();
+
+    public String getNombrePropio() {
+        return nombrePropio;
+    }
+
+    public void setNombrePropio(String nombrePropio) {
+        this.nombrePropio = nombrePropio;
+    }
 
     public String getHabitat() {
         return habitat;
@@ -69,5 +79,19 @@ public abstract class Mamifero {
 
     public void setFormaComunicarse(String formaComunicarse) {
         this.formaComunicarse = formaComunicarse;
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder descripcion = new StringBuilder();
+        descripcion.append(String.format("mamiferos.generalidades.Mamifero.habitat: %s \n",habitat));
+        descripcion.append(String.format("mamiferos.generalidades.Mamifero.altura: %s \n",altura));
+        descripcion.append(String.format("mamiferos.generalidades.Mamifero.largo: %s \n",largo));
+        descripcion.append(String.format("mamiferos.generalidades.Mamifero.peso: %s \n",peso));
+        descripcion.append(String.format("mamiferos.generalidades.Mamifero.nombreCientifico: %s \n",nombreCientifico));
+        descripcion.append(String.format("mamiferos.generalidades.Mamifero.formaComunicarse: %s \n",formaComunicarse));
+        return descripcion.toString();
+
     }
 }

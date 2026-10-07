@@ -1,4 +1,4 @@
-import Mamiferos.*;
+import mamiferos.*;
 
 class Main{
 

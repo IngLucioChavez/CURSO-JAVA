@@ -1,6 +1,6 @@
-package Mamiferos.TiposMamiferos;
+package mamiferos.tipos_mamiferos;
 
-import Mamiferos.Generalidades.Mamifero;
+import mamiferos.generalidades.Mamifero;
 
 public abstract class Canino extends Mamifero {
 
@@ -26,5 +26,14 @@ public abstract class Canino extends Mamifero {
 
     public void setTamanioColmillos(Float tamanioColmillos) {
         this.tamanioColmillos = tamanioColmillos;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder descripcion = new StringBuilder();
+        descripcion.append(super.toString());
+        descripcion.append(String.format("mamiferos.tipos_mamiferos.Canino.color: %s \n",color));
+        descripcion.append(String.format("mamiferos.tipos_mamiferos.Canino.tamanioColmillos: %s \n",tamanioColmillos));
+        return descripcion.toString();
     }
 }

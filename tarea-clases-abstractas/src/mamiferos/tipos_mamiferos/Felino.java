@@ -1,6 +1,6 @@
-package Mamiferos.TiposMamiferos;
+package mamiferos.tipos_mamiferos;
 
-import Mamiferos.Generalidades.Mamifero;
+import mamiferos.generalidades.Mamifero;
 
 public abstract class Felino extends Mamifero {
 
@@ -28,6 +28,14 @@ public abstract class Felino extends Mamifero {
         this.velocidad = velocidad;
     }
 
+    @Override
+    public String toString() {
 
+        StringBuilder descripcion = new StringBuilder();
+        descripcion.append(super.toString());
+        descripcion.append(String.format("mamiferos.tipos_mamiferos.Felino.tamanioGarras: %s \n",tamanioGarras));
+        descripcion.append(String.format("mamiferos.tipos_mamiferos.Felino.velocidad: %s \n",velocidad));
+        return descripcion.toString();
 
+    }
 }
