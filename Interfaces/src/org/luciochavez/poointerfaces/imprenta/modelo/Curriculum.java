@@ -24,7 +24,7 @@ public class Curriculum extends Hoja{
     @Override
     public String imprimir() {
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("Curriculum\n");
         builder.append("Nombre: ").append(persona).append("\n")
                 .append("Carrera: ").append(carrera).append("\n")
                 .append("Resumen: ").append(contenido).append("\n")
