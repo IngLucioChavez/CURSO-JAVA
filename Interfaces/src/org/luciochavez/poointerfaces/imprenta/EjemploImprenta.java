@@ -16,14 +16,21 @@ public class EjemploImprenta {
 
         Informe info = new Informe("Juan Silva","Carlos Alam","Contendio Reporte");
 
-        //cv e info pueden pasarse al metodo imprimir porque ambos heredan de Hoja
+        Libro libro = new Libro("Deitel",Genero.FANTASIA,"Patrones de Diseño");
+        libro.addPagina(new Pagina("contenido página 1"))
+                .addPagina(new Pagina("contenido página 2"))
+                .addPagina(new Pagina("contenido página 3"));
+
         imprimir(cv);
         imprimir(info);
+        imprimir(libro);
 
     }
 
-    //metodo que implementa la acción de imprimir de un objeto que hereda de Hoja
-    public static void imprimir(Hoja imprimible){
+    //metodo que implementa la acción de imprimir de un objeto que implementa la interfaz de Imprimible
+    //cualquier objeto que implementa la interfaz imprimible
+    //ya que una interfaz define lo que una clase puede hacer
+    public static void imprimir(Imprimible imprimible){
         System.out.println(imprimible.imprimir());
     }
 
