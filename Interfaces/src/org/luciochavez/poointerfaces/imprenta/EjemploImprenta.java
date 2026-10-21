@@ -16,7 +16,7 @@ public class EjemploImprenta {
 
         Informe info = new Informe("Juan Silva","Carlos Alam","Contendio Reporte");
 
-        Libro libro = new Libro("Deitel",Genero.FANTASIA,"Patrones de Diseño");
+        Libro libro = new Libro("Deitel",Genero.PROGRAMACION,"Patrones de Diseño");
         libro.addPagina(new Pagina("contenido página 1"))
                 .addPagina(new Pagina("contenido página 2"))
                 .addPagina(new Pagina("contenido página 3"));

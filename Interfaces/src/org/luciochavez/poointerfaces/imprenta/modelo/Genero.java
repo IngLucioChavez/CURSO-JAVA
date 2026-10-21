@@ -5,7 +5,8 @@ public enum Genero {
     DRAMA("drama"),
     ACCION("acción"),
     AVENTURA("aventura"),
-    FANTASIA("fantasia");
+    FANTASIA("fantasia"),
+    PROGRAMACION("programación");
 
     private String genero;
 
@@ -13,7 +14,7 @@ public enum Genero {
         this.genero = genero;
     }
 
-    private String getGenero(){
+    protected String getGenero(){
         return genero;
     }
 

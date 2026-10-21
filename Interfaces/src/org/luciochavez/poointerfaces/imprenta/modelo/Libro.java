@@ -27,7 +27,7 @@ public class Libro implements Imprimible{
         StringBuilder sb = new StringBuilder("Libro\n");
         sb.append(String.format("Titulo: %s\n",titulo))
             .append(String.format("Autor: %s\n",autor))
-            .append(String.format("Genero: %s\n",genero));
+            .append(String.format("Genero: %s\n",genero.getGenero()));
 
         int i = 0;
         for(Imprimible pagina:paginas){
