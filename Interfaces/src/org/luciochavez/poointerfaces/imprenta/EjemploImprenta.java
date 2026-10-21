@@ -21,17 +21,28 @@ public class EjemploImprenta {
                 .addPagina(new Pagina("contenido página 2"))
                 .addPagina(new Pagina("contenido página 3"));
 
-        imprimir(cv);
-        imprimir(info);
-        imprimir(libro);
+        Imprimible.imprimir(cv);
+        Imprimible.imprimir(info);
+        Imprimible.imprimir(libro);
+        System.out.println(Imprimible.HOLA + "\n");
+
+        // creando obj genérico a partir de una interfaz
+        // obj de una clase anónima
+        Imprimible ObjGenerico = new Imprimible() {
+            @Override
+            public String imprimir() {
+                return "ejecutando método imprimir de un objeto genérico";
+            }
+        };
+        Imprimible.imprimir(ObjGenerico);
 
     }
 
     //metodo que implementa la acción de imprimir de un objeto que implementa la interfaz de Imprimible
     //cualquier objeto que implementa la interfaz imprimible
     //ya que una interfaz define lo que una clase puede hacer
-    public static void imprimir(Imprimible imprimible){
+    /*public static void imprimir(Imprimible imprimible){
         System.out.println(imprimible.imprimir());
-    }
+    }*/
 
 }
