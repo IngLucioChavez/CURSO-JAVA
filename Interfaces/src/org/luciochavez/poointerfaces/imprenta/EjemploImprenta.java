@@ -6,7 +6,9 @@ public class EjemploImprenta {
 
     public static void main(String[] args) {
 
-        Curriculum cv = new Curriculum(new Persona("Chávez","Lucio"),"ITICS","informe laboral...");
+        Curriculum cv = new Curriculum(new Persona("Chávez","Lucio"),
+                "ITICS",
+                "informe laboral...");
         cv.addExperiencia("PGR - Desarrollador FullStack")
                 .addExperiencia("TouchesBegan - Desarrollador FullStack")
                 .addExperiencia("Totalpat - Desarrollador FullStack")
@@ -14,9 +16,15 @@ public class EjemploImprenta {
                 .addExperiencia("Totalpat - Arquitecto de Software")
                 .addExperiencia("Facil Group - Desarrollador FullStack");
 
-        Informe info = new Informe(new Persona("Silva","Juan"),new Persona("Chávez","Carlos"),"Contendio Reporte");
+        Informe info = new Informe(
+                new Persona("Silva","Juan"),
+                new Persona("Chávez","Carlos"),
+                "Contendio Reporte");
 
-        Libro libro = new Libro(new Persona("Deitel","Deitel"),Genero.PROGRAMACION,"Patrones de Diseño");
+        Libro libro = new Libro(
+                new Persona("Deitel","Deitel"),
+                Genero.PROGRAMACION,
+                "Patrones de Diseño");
         libro.addPagina(new Pagina("contenido página 1"))
                 .addPagina(new Pagina("contenido página 2"))
                 .addPagina(new Pagina("contenido página 3"));
