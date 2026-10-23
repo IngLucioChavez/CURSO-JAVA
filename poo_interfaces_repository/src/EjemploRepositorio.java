@@ -25,7 +25,7 @@ void main() {
 
     System.out.println("-----Ordenar DESC-------");
     List<Cliente> clientesOrdenDESC = ((OrdenableRepositorio) repo).listar("nombre",Direccion.DESC);
-    clientesOrdenASC.forEach(System.out::println);
+    clientesOrdenDESC.forEach(System.out::println);
 
     System.out.println("-----Editar-------");
     Cliente clienteEditado = new Cliente("Delgado","Ma Isabel");
