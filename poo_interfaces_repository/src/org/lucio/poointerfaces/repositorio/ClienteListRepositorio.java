@@ -24,7 +24,7 @@ public class ClienteListRepositorio
     public Cliente porId(Integer id) {
         Cliente c = null;
         for(Cliente cli: dataSource){
-            if( cli.getId().equals(id) ){
+            if( cli.getId() != null && cli.getId().equals(id) ){
                 c = cli;
                 break;
             }
