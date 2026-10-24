@@ -5,7 +5,7 @@ import org.lucio.poointerfaces.repositorio.*;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 void main() {
 
-    CrudRepositorio repo = new ClienteListRepositorio();
+    OrdenablePaginableCrudRepositorio repo = new ClienteListRepositorio();
     repo.crear(new Cliente("Chávez","Lucio"));
     repo.crear(new Cliente("Chávez","Carlos"));
     repo.crear(new Cliente("Silva","Juan"));
@@ -16,15 +16,15 @@ void main() {
     clientes.forEach(System.out::println);
 
     System.out.println("-----Paginable-------");
-    List<Cliente> clientesPag = ((PaginableRepositorio)repo).listar(0,2);
+    List<Cliente> clientesPag = repo.listar(0,2);
     clientesPag.forEach(System.out::println);
 
     System.out.println("-----Ordenar ASC-------");
-    List<Cliente> clientesOrdenASC = ((OrdenableRepositorio) repo).listar("nombre",Direccion.ASC);
+    List<Cliente> clientesOrdenASC = repo.listar("nombre",Direccion.ASC);
     clientesOrdenASC.forEach(System.out::println);
 
     System.out.println("-----Ordenar DESC-------");
-    List<Cliente> clientesOrdenDESC = ((OrdenableRepositorio) repo).listar("nombre",Direccion.DESC);
+    List<Cliente> clientesOrdenDESC = repo.listar("nombre",Direccion.DESC);
     clientesOrdenDESC.forEach(System.out::println);
 
     System.out.println("-----Editar-------");
@@ -42,5 +42,8 @@ void main() {
     System.out.println("-----Eliminar-------");
     repo.eliminar(2);
     repo.listar().forEach(System.out::println);
+
+    System.out.println("-----Total Count-------");
+    System.out.println("Total: " + repo.total());
 
 }

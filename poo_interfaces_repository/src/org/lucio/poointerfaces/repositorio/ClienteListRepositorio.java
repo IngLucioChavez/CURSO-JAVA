@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ClienteListRepositorio
-        implements CrudRepositorio, OrdenableRepositorio, PaginableRepositorio{
+        implements OrdenablePaginableCrudRepositorio{
 
     private List<Cliente> dataSource;
 
@@ -127,5 +127,10 @@ public class ClienteListRepositorio
     @Override
     public List<Cliente> listar(int desde, int hasta) {
         return dataSource.subList(desde,hasta);
+    }
+
+    @Override
+    public int total() {
+        return dataSource.size();
     }
 }
