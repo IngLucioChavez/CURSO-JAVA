@@ -42,6 +42,10 @@ public class EjemploGenericos {
            new ClientePremium("a3","n3"),
         });
 
+        imprimirClientes(clientes);
+        imprimirClientes(listaClientes);
+        imprimirClientes(listaClientesPremium);
+
     }
     // para limitar un metodo genérico se define con extends
     public static <T extends Number> List<T> fromArrayToList(T[] c){
@@ -50,11 +54,11 @@ public class EjemploGenericos {
 
     // para limitar a objetos de tipo Cliente y su descendencia como ClientePremium
     // con el & se limita aún más, donde se quiere decir que además debe implementar la Interfaz Comparable
-    public static <T extends Cliente & Comparable<T>> List<T> fromArrayToList(T[] c){
+    public static <T extends Cliente> List<T> fromArrayToList(T[] c){
         return Arrays.asList(c);
     }
 
-    // metodo que implementa genéricos pero sin limitaciones 
+    // metodo que implementa genéricos pero sin limitaciones
     public static <T> List<T> fromArrayToList(T[] c){
         return Arrays.asList(c);
     }
@@ -65,6 +69,10 @@ public class EjemploGenericos {
             System.out.println(elemento);
         }
         return Arrays.asList(c);
+    }
+    // con el comodín/wildcard se puede tratar en el metodo a cualquier tipo de cliente
+    public static void imprimirClientes(List<? extends Cliente> clientes){
+        clientes.forEach(System.out::println);
     }
 
 
