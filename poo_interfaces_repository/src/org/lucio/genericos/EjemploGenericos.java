@@ -46,6 +46,10 @@ public class EjemploGenericos {
         imprimirClientes(listaClientes);
         imprimirClientes(listaClientesPremium);
 
+        System.out.println("Máximo de 1,5,6: " + calculandoMayor(1,5,6));
+        System.out.println("Máximo de 3.9,1.1,5.4: " + calculandoMayor(3.9f,1.1f,5.4f));
+        System.out.println("Máximo de uno,dos,tres: " + calculandoMayor("uno","dos","tres"));
+
     }
     // para limitar un metodo genérico se define con extends
     public static <T extends Number> List<T> fromArrayToList(T[] c){
@@ -73,6 +77,17 @@ public class EjemploGenericos {
     // con el comodín/wildcard se puede tratar en el metodo a cualquier tipo de cliente
     public static void imprimirClientes(List<? extends Cliente> clientes){
         clientes.forEach(System.out::println);
+    }
+
+    public static <T extends Comparable<T>> T calculandoMayor(T a, T b, T c){
+        T max = a;
+        if( b.compareTo(max) > 0 ){
+            max = b;
+        }
+        if( c.compareTo(max) > 0 ){
+            max = c;
+        }
+        return max;
     }
 
 
