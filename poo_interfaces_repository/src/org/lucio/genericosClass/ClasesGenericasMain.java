@@ -4,36 +4,42 @@ public class ClasesGenericasMain {
 
     static void main() {
 
-        Camion transporteCaballos = new Camion(5);
+        Camion<Animal> transporteCaballos = new Camion<>(5);
         transporteCaballos.addObjeto(new Animal("peregrino","caballo"));
         transporteCaballos.addObjeto(new Animal("veloz","caballo"));
         transporteCaballos.addObjeto(new Animal("trueno","caballo"));
         transporteCaballos.addObjeto(new Animal("laila","caballo"));
         transporteCaballos.addObjeto(new Animal("dodi","caballo"));
 
-        for(Object a:transporteCaballos){
-            Animal an = (Animal) a;
-            System.out.println("Nombre Caballo: " + an.getNombre() + " Tipo: " + an.getTipo());
-        }
+        verContenidoCamion(transporteCaballos);
 
-        Camion transporteMAquinaria = new Camion(3);
+        Camion<Maquinaria> transporteMAquinaria = new Camion<>(3);
         transporteMAquinaria.addObjeto(new Maquinaria("tractor"));
         transporteMAquinaria.addObjeto(new Maquinaria("grua"));
         transporteMAquinaria.addObjeto(new Maquinaria("perforadora"));
 
-        for(Object m: transporteMAquinaria){
-            Maquinaria ma = (Maquinaria) m;
-            System.out.println("tipo maquinaria: " + ma.getTipo());
-        }
+        verContenidoCamion(transporteMAquinaria);
 
-        Camion transporteAutos = new Camion(3);
+        Camion<Automovil> transporteAutos = new Camion<>(3);
         transporteAutos.addObjeto(new Automovil("mazda"));
         transporteAutos.addObjeto(new Automovil("chevrolet"));
         transporteAutos.addObjeto(new Automovil("toyota"));
 
-        for(Object a: transporteAutos){
-            Automovil au = (Automovil) a;
-            System.out.println("marca auto: " + au.getMarca());
+        verContenidoCamion(transporteAutos);
+
+    }
+
+    public static <T> void verContenidoCamion(Camion<T> camion){
+
+        for(T a:camion){
+
+            if(a instanceof Animal)
+                System.out.println("Nombre Caballo: " + ((Animal)a).getNombre() + " Tipo: " + ((Animal)a).getTipo());
+            if(a instanceof Maquinaria)
+                System.out.println("tipo maquinaria: " + ((Maquinaria)a).getTipo());
+            if(a instanceof Automovil)
+                System.out.println("marca auto: " + ((Automovil)a).getMarca());
+
         }
 
     }
