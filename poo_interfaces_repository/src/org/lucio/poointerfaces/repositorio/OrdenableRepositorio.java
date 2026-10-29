@@ -4,9 +4,9 @@ import org.lucio.poointerfaces.modelo.Cliente;
 
 import java.util.List;
 
-public interface OrdenableRepositorio {
+public interface OrdenableRepositorio<T> {
 
-    List<Cliente> listar(String atributo, Direccion dir);
+    List<T> listar(String atributo, Direccion dir);
 
     default int comparar(String campo, Cliente a,Cliente b){
         int resultado = 0;

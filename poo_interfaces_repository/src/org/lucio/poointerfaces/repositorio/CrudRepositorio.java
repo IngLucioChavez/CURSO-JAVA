@@ -1,15 +1,13 @@
 package org.lucio.poointerfaces.repositorio;
 
-import org.lucio.poointerfaces.modelo.Cliente;
-
 import java.util.List;
 
-public interface CrudRepositorio {
+public interface CrudRepositorio<T> {
 
-    List<Cliente> listar();
-    Cliente porId(Integer id);
-    void crear(Cliente cliente);
-    void editar(Cliente cliente);
+    List<T> listar();
+    T porId(Integer id);
+    void crear(T cliente);
+    void editar(T cliente);
     void eliminar(Integer id);
 
 }

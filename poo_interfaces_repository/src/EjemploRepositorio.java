@@ -5,7 +5,7 @@ import org.lucio.poointerfaces.repositorio.*;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 void main() {
 
-    OrdenablePaginableCrudRepositorio repo = new ClienteListRepositorio();
+    OrdenablePaginableCrudRepositorio<Cliente> repo = new ClienteListRepositorio();
     repo.crear(new Cliente("Chávez","Lucio"));
     repo.crear(new Cliente("Chávez","Carlos"));
     repo.crear(new Cliente("Silva","Juan"));
