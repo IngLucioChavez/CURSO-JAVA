@@ -2,19 +2,13 @@ package org.lucio.poointerfaces.modelo;
 
 import java.util.Objects;
 
-public class Cliente {
+public class Cliente extends BaseEntity{
 
-    private Integer id;
     private String nombre;
     private String apellido;
-    private static int ultimoId;
-
-    public Cliente() {
-        id = ++ultimoId; //para generar el id automático
-    }
 
     public Cliente(String apellido, String nombre) {
-        this();
+        super();
         this.apellido = apellido;
         this.nombre = nombre;
     }
@@ -25,14 +19,6 @@ public class Cliente {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getNombre() {

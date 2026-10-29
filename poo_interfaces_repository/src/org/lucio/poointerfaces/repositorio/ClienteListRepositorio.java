@@ -9,24 +9,6 @@ public class ClienteListRepositorio
         extends AbstractaListRepositorio<Cliente>{
 
     @Override
-    public Cliente porId(Integer id) {
-        Cliente c = null;
-        for(Cliente cli: dataSource){
-            if( cli.getId() != null && cli.getId().equals(id) ){
-                c = cli;
-                break;
-            }
-        }
-        return c;
-    }
-
-    @Override
-    public void eliminar(Integer id) {
-        Cliente c = this.porId(id);
-        dataSource.remove(c);
-    }
-
-    @Override
     public void editar(Cliente cliente) {
         Cliente c = this.porId(cliente.getId());
         c.setNombre(cliente.getNombre());
