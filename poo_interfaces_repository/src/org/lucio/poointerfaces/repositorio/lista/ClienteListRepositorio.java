@@ -1,12 +1,14 @@
-package org.lucio.poointerfaces.repositorio;
+package org.lucio.poointerfaces.repositorio.lista;
 
 import org.lucio.poointerfaces.modelo.Cliente;
+import org.lucio.poointerfaces.repositorio.AbstractaListRepositorio;
+import org.lucio.poointerfaces.repositorio.Direccion;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteListRepositorio
-        extends AbstractaListRepositorio<Cliente>{
+        extends AbstractaListRepositorio<Cliente> {
 
     @Override
     public void editar(Cliente cliente) {
@@ -32,6 +34,20 @@ public class ClienteListRepositorio
         });
 
         return listaOrdenada;
+    }
+
+    @Override
+    public int comparar(String campo, Cliente a, Cliente b){
+        int resultado = 0;
+        switch (campo) {
+            case "id" ->
+                    resultado = a.getId().compareTo(b.getId());
+            case "nombre" ->
+                    resultado = a.getNombre().compareTo(b.getNombre());
+            case "apellido" ->
+                    resultado = a.getApellido().compareTo(b.getApellido());
+        }
+        return resultado;
     }
 
 }

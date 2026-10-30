@@ -1,5 +1,7 @@
 package org.lucio.poointerfaces.repositorio;
 
-public interface OrdenablePaginableCrudRepositorio<T>
+import org.lucio.poointerfaces.modelo.BaseEntity;
+
+public interface OrdenablePaginableCrudRepositorio<T extends BaseEntity>
         extends CrudRepositorio<T>, OrdenableRepositorio<T>, PaginableRepositorio<T>, ContableRepositorio{
 }

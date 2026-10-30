@@ -39,15 +39,4 @@ public class Cliente extends BaseEntity{
         return sb.toString();
     }
 
-    @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Cliente cliente)) return false;
-        // Objects.equals es un metodo helper
-        return Objects.equals(id, cliente.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 }

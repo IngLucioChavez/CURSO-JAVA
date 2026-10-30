@@ -1,5 +1,7 @@
 package org.lucio.poointerfaces.modelo;
 
+import java.util.Objects;
+
 public class BaseEntity {
 
     protected Integer id;
@@ -16,4 +18,18 @@ public class BaseEntity {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof BaseEntity base)) return false;
+        // Objects.equals es un metodo helper
+        return Objects.equals(id, base.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+
 }
