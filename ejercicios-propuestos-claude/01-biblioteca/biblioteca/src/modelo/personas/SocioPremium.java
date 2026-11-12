@@ -5,4 +5,10 @@ public class SocioPremium extends Socio{
         super(numeroSocio, nombres, ap, am);
         this.limitePrestamos = 6;
     }
+
+    @Override
+    protected String tipo() {
+        return "Socio Premium";
+    }
+
 }

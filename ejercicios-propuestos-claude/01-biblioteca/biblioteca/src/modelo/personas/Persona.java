@@ -1,9 +1,12 @@
 package modelo.personas;
 
+import modelo.BaseEntity;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-abstract class Persona {
+abstract class Persona extends BaseEntity {
 
     private String nombres;
     private String ap;
@@ -11,8 +14,10 @@ abstract class Persona {
     private Integer edad;
     private List<String> numerosTelefonicos;
     private List<String> direcciones;
+    private static Integer ultimoId;
 
     public Persona(String nombres, String ap, String am, Integer edad) {
+        super(++ultimoId);
         this.nombres = nombres;
         this.ap = ap;
         this.am = am;
@@ -71,4 +76,29 @@ abstract class Persona {
         return List.copyOf(direcciones);
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder text = new StringBuilder();
+        text.append(String.format("Persona(%s)\n",getId()));
+        text.append(String.format("nombre(s): %s\n",nombres));
+        text.append(String.format("ap: %s\n",ap));
+        text.append(String.format("am: %s\n",am));
+        text.append(String.format("edad: %s\n",edad));
+
+        text.append("Números telefónicos: ");
+        AtomicInteger item = new AtomicInteger(1);
+        numerosTelefonicos.forEach(num->{
+            text.append(String.format("Número Telefónico %s: %s\n",item.getAndIncrement(),num));
+        });
+
+
+        text.append("Direcciones: ");
+        item.set(1);
+        direcciones.forEach(dir->{
+            text.append(String.format("Dirección %s: %s\n",item.getAndIncrement(),dir));
+        });
+
+        return text.toString();
+    }
 }
