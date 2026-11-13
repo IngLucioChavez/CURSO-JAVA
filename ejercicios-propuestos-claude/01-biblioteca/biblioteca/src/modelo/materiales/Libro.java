@@ -2,12 +2,13 @@ package modelo.materiales;
 
 import interfaces.Imprimible;
 import interfaces.Prestable;
+import interfaces.Renovable;
 import modelo.Prestamo;
 import modelo.personas.Socio;
 
 import java.time.LocalDate;
 
-public class Libro extends Material implements Imprimible, Prestable {
+public class Libro extends Material implements Imprimible, Prestable, Renovable {
 
     private Integer paginas;
 
@@ -37,16 +38,27 @@ public class Libro extends Material implements Imprimible, Prestable {
 
     @Override
     public Prestamo prestar(Socio persona, LocalDate fechaFinalPrestamo) {
-        return new Prestamo(persona,fechaFinalPrestamo);
+
+        if(Prestamo.limiteAlcanzado(persona))
+            return null;
+
+        Prestamo prestamo = new Prestamo(persona,fechaFinalPrestamo);
+        prestamo.addMaterial(this);
+
+        return prestamo;
+
     }
 
     @Override
     public Prestamo prestar(Socio persona, Long diasPrestamo) {
-        return new Prestamo(persona,diasPrestamo);
-    }
 
-    @Override
-    public void devolver(Integer idPrestamo) {
+        if(Prestamo.limiteAlcanzado(persona))
+            return null;
+
+        Prestamo prestamo = new Prestamo(persona,diasPrestamo);
+        prestamo.addMaterial(this);
+
+        return prestamo;
 
     }
 

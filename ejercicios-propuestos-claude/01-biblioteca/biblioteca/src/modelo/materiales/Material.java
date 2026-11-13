@@ -7,7 +7,7 @@ public abstract class Material extends BaseEntity {
     protected String titulo;
     protected Integer anio;
     protected Genero genero;
-    private static Integer ultimoId;
+    private static int ultimoId;
 
     public Material(String titulo, Integer anio, Genero genero){
         super(++ultimoId);

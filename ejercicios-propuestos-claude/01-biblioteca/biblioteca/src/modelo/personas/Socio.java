@@ -4,6 +4,7 @@ public class Socio extends Persona{
 
     private String numeroSocio;
     protected Integer limitePrestamos = 3;
+    protected Integer prestamosRegistrados = 0;
 
     public Socio(String numeroSocio,String nombres, String ap, String am) {
         super(nombres, ap, am, 0);
@@ -20,6 +21,21 @@ public class Socio extends Persona{
 
     protected String tipo(){
         return "Socio Estándar";
+    }
+
+    public Integer getPrestamosRegistrados(){
+        return prestamosRegistrados;
+    }
+
+    public void addNumeroPrestamos(){
+        if( prestamosRegistrados >= limitePrestamos )
+            return;
+        else
+            ++prestamosRegistrados;
+    }
+
+    public void disNumeroPrestamos(Integer numeroPrestamos){
+        prestamosRegistrados = Math.max(0,prestamosRegistrados - numeroPrestamos);
     }
 
     @Override
