@@ -1,8 +1,8 @@
 package modelo.materiales;
 
-import interfaces.Imprimible;
-import interfaces.Prestable;
-import interfaces.Renovable;
+import modelo.interfaces.Imprimible;
+import modelo.interfaces.Prestable;
+import modelo.interfaces.Renovable;
 import modelo.Prestamo;
 import modelo.personas.Socio;
 

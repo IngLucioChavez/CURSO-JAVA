@@ -1,4 +1,4 @@
-package interfaces;
+package modelo.interfaces;
 
 import modelo.Prestamo;
 

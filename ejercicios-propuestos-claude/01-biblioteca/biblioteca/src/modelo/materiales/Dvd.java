@@ -1,6 +1,6 @@
 package modelo.materiales;
 
-import interfaces.Imprimible;
+import modelo.interfaces.Imprimible;
 
 public class Dvd extends Material implements Imprimible {
 

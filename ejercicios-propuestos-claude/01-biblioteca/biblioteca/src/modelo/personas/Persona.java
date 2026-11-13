@@ -76,6 +76,10 @@ public abstract class Persona extends BaseEntity {
         return List.copyOf(direcciones);
     }
 
+    public String getNombreCompleto(){
+        return String.format("%s %s %s",nombres,ap,am);
+    }
+
     @Override
     public String toString() {
 
