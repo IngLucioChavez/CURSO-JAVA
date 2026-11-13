@@ -1,6 +1,6 @@
 package modelo.materiales;
 
-import interfaces.Imprimible;
+import modelo.interfaces.Imprimible;
 
 public class Revista extends Material implements Imprimible {
 
