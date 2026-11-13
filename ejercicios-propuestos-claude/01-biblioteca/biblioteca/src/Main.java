@@ -2,6 +2,7 @@ import modelo.Prestamo;
 import modelo.materiales.Genero;
 import modelo.materiales.Libro;
 import modelo.personas.Socio;
+import modelo.personas.SocioPremium;
 import repositorio.SocioRepositorio;
 import repositorio.enumeraciones.FormasDeOrden;
 
@@ -11,48 +12,34 @@ public class Main{
 
     void main(String[] args) {
 
-        SocioRepositorio repoSocio = new SocioRepositorio();
-        repoSocio.crearRegistro(new Socio("0001","Lucio","Chávez","García"));
-        repoSocio.crearRegistro(new Socio("0002","Carlos Alam","Chávez","García"));
-        repoSocio.crearRegistro(new Socio("0003","Ma Guadalupe","García","Delgado"));
-        repoSocio.crearRegistro(new Socio("0004","Juan Pablo","Silva","Gutierrez"));
-        repoSocio.crearRegistro(new Socio("0005","Paola","Sánchez","García"));
+        SocioPremium original = new SocioPremium("0010", "Ana", "Ruiz", "Soto");
+        Socio copia = original.copiar();
+        System.out.println(copia.getId().equals(original.getId()));   // true
+        System.out.println(copia != original);                        // true (objeto distinto)
+        System.out.println(copia.getLimitePrestamos());
 
-        // listar todos los registros
-        repoSocio.obtenerRegistros().forEach(o->{
-            System.out.printf("id: %s, numeroSocio: %s, nombre: %s\n",o.getId(),o.getNumeroSocio(),o.getNombreCompleto());
-        });
-        // numero total de registros
-        System.out.printf("registros totales: %s\n",repoSocio.obtenerNumeroRegistros());
-        // listar registros paginados
-        repoSocio.obtenerRegistros(1,2).forEach(o->{
-            System.out.printf("id: %s, numeroSocio: %s, nombre: %s%n",o.getId(),o.getNumeroSocio(),o.getNombreCompleto());
-        });
+        Socio siguiente = new Socio("0011", "Beto", "Paz", "Luna");
+        System.out.println(siguiente.getId() == original.getId() + 1);  // true: la copia no gastó id
+        copia.setAp("Cambiado");
+        System.out.println(original.getAp());
+
         System.out.println();
-        // listar registros ordenados por apellido paterno
-        repoSocio.obtenerRegistros("ap",FormasDeOrden.DESC).forEach(o->{
-            System.out.printf("id: %s, numeroSocio: %s, nombre: %s%n",o.getId(),o.getNumeroSocio(),o.getNombreCompleto());
-        });
-        System.out.println();
-        // agregar otro socio
-        repoSocio.crearRegistro(new Socio("0005","Alberto","Marquez","Pérez"));
-        repoSocio.obtenerRegistros().forEach(o->{
-            System.out.printf("id: %s, numeroSocio: %s, nombre: %s\n",o.getId(),o.getNumeroSocio(),o.getNombreCompleto());
-        });
-        System.out.println();
-        // modificación de registro
-        Socio sociomodi = repoSocio.obtenerRegistroPorId(6);
-        sociomodi.setAp("Vergara");
-        repoSocio.modificarRegistro(sociomodi);
-        repoSocio.obtenerRegistros().forEach(o->{
-            System.out.printf("id: %s, numeroSocio: %s, nombre: %s\n",o.getId(),o.getNumeroSocio(),o.getNombreCompleto());
-        });
-        System.out.println();
-        // eliminación de socio
-        repoSocio.eliminarRegistro(6);
-        repoSocio.obtenerRegistros().forEach(o->{
-            System.out.printf("id: %s, numeroSocio: %s, nombre: %s\n",o.getId(),o.getNumeroSocio(),o.getNombreCompleto());
-        });
+        SocioRepositorio repo = new SocioRepositorio();
+        Socio s = new Socio("0001", "Lucio", "Chávez", "García");
+        repo.crearRegistro(s);
+        s.setAp("Cambiado");                                           // alterar el objeto original del Main
+        System.out.println(repo.obtenerRegistroPorId(s.getId()).getAp());   // "Chávez": el repo no cambió
+
+        Socio leido = repo.obtenerRegistroPorId(s.getId());
+        leido.setAp("Otro");
+        System.out.println(repo.obtenerRegistroPorId(s.getId()).getAp());   // "Chávez": sigue igual hasta modificar
+
+        repo.obtenerRegistros().get(0).setAp("X");                      // alterar un elemento del listado
+        System.out.println(repo.obtenerRegistroPorId(s.getId()).getAp());   // "Chávez"
+
+        leido.setAp("Vergara");
+        repo.modificarRegistro(leido);
+        System.out.println(repo.obtenerRegistroPorId(s.getId()).getAp());   // "Vergara": ahora sí
 
     }
 
