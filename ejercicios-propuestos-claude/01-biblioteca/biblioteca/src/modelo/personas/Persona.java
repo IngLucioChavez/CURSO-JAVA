@@ -26,6 +26,16 @@ public abstract class Persona extends BaseEntity {
         this.direcciones = new ArrayList<>();
     }
 
+    protected Persona(Persona otro) {
+        super(otro.getId());                 // mismo id, no incrementa ultimoId
+        this.nombres = otro.nombres;
+        this.ap = otro.ap;
+        this.am = otro.am;
+        this.edad = otro.edad;
+        this.numerosTelefonicos = new ArrayList<>(otro.numerosTelefonicos);
+        this.direcciones = new ArrayList<>(otro.direcciones);
+    }
+
     public String getNombres() {
         return nombres;
     }

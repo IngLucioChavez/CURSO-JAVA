@@ -11,6 +11,18 @@ public class Revista extends Material implements Imprimible {
         this.paginas = paginas;
     }
 
+    protected Revista(Revista otro){
+        super(otro);
+        this.paginas = otro.paginas;
+    }
+
+    @Override
+    public void actualizarDesde(Material otro){
+        super.actualizarDesde(otro);
+        if( otro instanceof Revista revista )
+            this.paginas = revista.paginas;
+    }
+
     public Integer getPaginas() {
         return paginas;
     }
@@ -35,4 +47,8 @@ public class Revista extends Material implements Imprimible {
         return "Revista";
     }
 
+    @Override
+    public Material copiar() {
+        return new Revista(this);
+    }
 }

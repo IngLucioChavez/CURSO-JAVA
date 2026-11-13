@@ -1,8 +1,9 @@
 package modelo.materiales;
 
 import modelo.BaseEntity;
+import modelo.interfaces.Copiable;
 
-public abstract class Material extends BaseEntity {
+public abstract class Material extends BaseEntity implements Copiable<Material> {
 
     protected String titulo;
     protected Integer anio;
@@ -14,6 +15,19 @@ public abstract class Material extends BaseEntity {
         this.titulo = titulo;
         this.anio = anio;
         this.genero = genero;
+    }
+
+    protected Material(Material otro){
+        super(otro.getId());
+        this.titulo = otro.titulo;
+        this.anio = otro.anio;
+        this.genero = otro.genero;
+    }
+
+    public void actualizarDesde(Material otro){
+        this.titulo = otro.titulo;
+        this.anio = otro.anio;
+        this.genero = otro.genero;
     }
 
     public String getTitulo() {

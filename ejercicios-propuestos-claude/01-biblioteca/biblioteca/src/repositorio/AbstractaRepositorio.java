@@ -2,17 +2,38 @@ package repositorio;
 
 import modelo.BaseEntity;
 import repositorio.enumeraciones.FormasDeOrden;
+import modelo.interfaces.Copiable;
 import repositorio.interfaces.GeneralRepositorioInt;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public abstract class AbstractaRepositorio<T extends BaseEntity> implements GeneralRepositorioInt<T> {
+public abstract class AbstractaRepositorio<T extends BaseEntity & Copiable<T>> implements GeneralRepositorioInt<T> {
 
     protected List<T> data;
+    protected static final Collator COLLATOR = Collator.getInstance(Locale.forLanguageTag("es-MX"));
 
     protected AbstractaRepositorio(){
         data = new ArrayList<>();
+    }
+
+    private List<T> copiarLista(List<T> origen){
+        List<T> resultado = new ArrayList<>();
+        for(T registro: origen){
+            resultado.add(registro.copiar());
+        }
+        return resultado;
+    }
+
+    protected T buscarOriginal(int idRegistro) {
+        for(T registro: data){
+            if( registro.getId() != null && registro.getId().equals(idRegistro) ) {
+                return registro;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -22,25 +43,21 @@ public abstract class AbstractaRepositorio<T extends BaseEntity> implements Gene
 
     @Override
     public List<T> obtenerRegistros() {
-        return List.copyOf(data);
+        return copiarLista(data);
     }
 
     @Override
     public T obtenerRegistroPorId(int idRegistro) {
 
-        for(T registro: data){
-            if( registro.getId() != null && registro.getId().equals(idRegistro) ) {
-                return registro;
-            }
-        }
+        T original = buscarOriginal(idRegistro);
+        return original == null ? null : original.copiar();
 
-        return null;
     }
 
     @Override
     public boolean eliminarRegistro(int idRegistro) {
 
-        T obj = obtenerRegistroPorId(idRegistro);
+        T obj = buscarOriginal(idRegistro);
         if( obj == null )
             return false;
         data.remove(obj);
@@ -51,9 +68,9 @@ public abstract class AbstractaRepositorio<T extends BaseEntity> implements Gene
     @Override
     public boolean crearRegistro(T obj) {
 
-        if( data.contains(obj) )
+        if( data.contains(obj) || obj == null )
             return false;
-        data.add(obj);
+        data.add(obj.copiar());
 
         return true;
     }
@@ -67,7 +84,7 @@ public abstract class AbstractaRepositorio<T extends BaseEntity> implements Gene
 
         int hasta = Math.min(desde + numRegistros, data.size());
 
-        return List.copyOf(data.subList(desde,hasta));
+        return copiarLista(data.subList(desde,hasta));
     }
 
     @Override
@@ -80,7 +97,7 @@ public abstract class AbstractaRepositorio<T extends BaseEntity> implements Gene
                     : comparar(campo,b,a)
                 );
 
-        return lista;
+        return copiarLista(lista);
     }
 
 }

@@ -17,6 +17,18 @@ public class Libro extends Material implements Imprimible, Prestable, Renovable 
         this.paginas = paginas;
     }
 
+    protected Libro(Libro otro){
+        super(otro);
+        this.paginas = otro.paginas;
+    }
+
+    @Override
+    public void actualizarDesde(Material otro){
+        super.actualizarDesde(otro);
+        if( otro instanceof Libro libro )
+            this.paginas = libro.paginas;
+    }
+
     public Integer getPaginas() {
         return paginas;
     }
@@ -65,5 +77,10 @@ public class Libro extends Material implements Imprimible, Prestable, Renovable 
     @Override
     public String obtenerTipo() {
         return "Libro";
+    }
+
+    @Override
+    public Material copiar() {
+        return new Libro(this);
     }
 }

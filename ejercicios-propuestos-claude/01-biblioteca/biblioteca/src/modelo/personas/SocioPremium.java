@@ -6,9 +6,18 @@ public class SocioPremium extends Socio{
         this.limitePrestamos = 6;
     }
 
+    protected SocioPremium(SocioPremium otro){
+        super(otro);
+    }
+
     @Override
     protected String tipo() {
         return "Socio Premium";
+    }
+
+    @Override
+    public Socio copiar(){
+        return new SocioPremium(this);
     }
 
 }
