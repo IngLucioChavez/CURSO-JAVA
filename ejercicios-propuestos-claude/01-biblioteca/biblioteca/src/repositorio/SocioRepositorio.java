@@ -7,7 +7,7 @@ public class SocioRepositorio extends AbstractaRepositorio<Socio> {
     @Override
     public boolean modificarRegistro(Socio obj) {
 
-        Socio search = obtenerRegistroPorId(obj.getId());
+        Socio search = buscarOriginal(obj.getId());
 
         if( search == null)
             return false;
@@ -27,19 +27,19 @@ public class SocioRepositorio extends AbstractaRepositorio<Socio> {
 
         switch(campo){
             case "nombres" -> {
-                comparacion = obj0.getNombres().compareTo(obj1.getNombres());
+                comparacion = COLLATOR.compare(obj0.getNombres(),obj1.getNombres());
             }
             case "ap" -> {
-                comparacion = obj0.getAp().compareTo(obj1.getAp());
+                comparacion = COLLATOR.compare(obj0.getAp(),obj1.getAp());
             }
             case "am" -> {
-                comparacion = obj0.getAm().compareTo(obj1.getAm());
+                comparacion = COLLATOR.compare(obj0.getAm(),obj1.getAm());
             }
             case "edad" -> {
                 comparacion = obj0.getEdad().compareTo(obj1.getEdad());
             }
             case "numeroSocio" -> {
-                comparacion = obj0.getNumeroSocio().compareTo(obj1.getNumeroSocio());
+                comparacion = COLLATOR.compare(obj0.getNumeroSocio(),obj1.getNumeroSocio());
             }
         }
 

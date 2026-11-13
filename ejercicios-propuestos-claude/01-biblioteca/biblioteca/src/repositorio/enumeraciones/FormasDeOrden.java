@@ -11,7 +11,8 @@ public enum FormasDeOrden {
         this.orden = orden;
     }
 
-    public String getOrden(){
+    @Override
+    public String toString(){
         return orden;
     }
 

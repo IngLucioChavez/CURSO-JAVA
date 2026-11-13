@@ -11,6 +11,19 @@ public class Dvd extends Material implements Imprimible {
         this.numeroCanciones = numeroCanciones;
     }
 
+    protected Dvd(Dvd otro){
+        super(otro);
+        this.numeroCanciones = otro.numeroCanciones;
+    }
+
+    @Override
+    public void actualizarDesde(Material otro){
+        super.actualizarDesde(otro);
+        if( otro instanceof Dvd dvd ){
+            this.numeroCanciones = dvd.numeroCanciones;
+        }
+    }
+
     public Integer getNumeroCanciones() {
         return numeroCanciones;
     }
@@ -35,4 +48,8 @@ public class Dvd extends Material implements Imprimible {
         return texto.toString();
     }
 
+    @Override
+    public Material copiar() {
+        return new Dvd(this);
+    }
 }

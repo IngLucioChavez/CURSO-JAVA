@@ -1,6 +1,8 @@
 package modelo.personas;
 
-public class Socio extends Persona{
+import modelo.interfaces.Copiable;
+
+public class Socio extends Persona implements Copiable<Socio> {
 
     private String numeroSocio;
     protected Integer limitePrestamos = 3;
@@ -9,6 +11,13 @@ public class Socio extends Persona{
     public Socio(String numeroSocio,String nombres, String ap, String am) {
         super(nombres, ap, am, 0);
         this.numeroSocio = numeroSocio;
+    }
+
+    protected Socio(Socio otro){
+        super(otro);
+        this.numeroSocio = otro.numeroSocio;
+        this.limitePrestamos = otro.limitePrestamos;
+        this.prestamosRegistrados = otro.prestamosRegistrados;
     }
 
     public String getNumeroSocio() {
@@ -47,5 +56,10 @@ public class Socio extends Persona{
         text.append(String.format("Numero Socio: %s\n",numeroSocio));
 
         return text.toString();
+    }
+
+    @Override
+    public Socio copiar() {
+        return new Socio(this);
     }
 }
