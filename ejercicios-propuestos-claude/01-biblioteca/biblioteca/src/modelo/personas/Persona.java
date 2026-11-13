@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-abstract class Persona extends BaseEntity {
+public abstract class Persona extends BaseEntity {
 
     private String nombres;
     private String ap;
@@ -14,7 +14,7 @@ abstract class Persona extends BaseEntity {
     private Integer edad;
     private List<String> numerosTelefonicos;
     private List<String> direcciones;
-    private static Integer ultimoId;
+    private static int ultimoId;
 
     public Persona(String nombres, String ap, String am, Integer edad) {
         super(++ultimoId);
@@ -86,14 +86,14 @@ abstract class Persona extends BaseEntity {
         text.append(String.format("am: %s\n",am));
         text.append(String.format("edad: %s\n",edad));
 
-        text.append("Números telefónicos: ");
+        text.append("Números telefónicos: \n");
         AtomicInteger item = new AtomicInteger(1);
         numerosTelefonicos.forEach(num->{
             text.append(String.format("Número Telefónico %s: %s\n",item.getAndIncrement(),num));
         });
 
 
-        text.append("Direcciones: ");
+        text.append("Direcciones: \n");
         item.set(1);
         direcciones.forEach(dir->{
             text.append(String.format("Dirección %s: %s\n",item.getAndIncrement(),dir));

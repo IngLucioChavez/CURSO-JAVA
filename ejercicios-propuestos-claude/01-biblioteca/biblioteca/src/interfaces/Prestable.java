@@ -9,6 +9,5 @@ public interface Prestable {
 
     Prestamo prestar(Socio persona, LocalDate fechaFinalPrestamo);
     Prestamo prestar(Socio persona, Long diasPrestamo);
-    void devolver(Integer idPrestamo);
 
 }

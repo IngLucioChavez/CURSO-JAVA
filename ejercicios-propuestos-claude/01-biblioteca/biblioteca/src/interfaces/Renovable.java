@@ -4,14 +4,18 @@ import modelo.Prestamo;
 
 public interface Renovable {
 
-    static final Integer diasPermitidos = 2;
+    Long DIAS_PERMITIDOS = Prestamo.MAX_DIAS_EXTENSION;
 
-    default void extenderDias(Prestamo prestamo){
+    default boolean extenderDias(Prestamo prestamo){
+
+        if( !prestamo.getMateriales().contains(this))
+            return false;
+        return prestamo.extender(Renovable.getDiasPermitidos());
 
     }
 
-    static Integer getDiasPermitidos(){
-        return Renovable.diasPermitidos;
+    static Long getDiasPermitidos(){
+        return Renovable.DIAS_PERMITIDOS;
     }
 
 }
