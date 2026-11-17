@@ -1,6 +1,7 @@
 package modelo;
 
 import modelo.interfaces.Copiable;
+import modelo.interfaces.Prestable;
 import modelo.materiales.Material;
 import modelo.personas.Socio;
 
@@ -85,6 +86,8 @@ public class Prestamo extends BaseEntity implements Copiable<Prestamo> {
         if(material == null || fechaDevolucion != null || materiales.contains(material))
             return false;
         if(limiteAlcanzado())
+            return false;
+        if( !(material instanceof Prestable) )
             return false;
 
         materiales.add(material.copiar());
