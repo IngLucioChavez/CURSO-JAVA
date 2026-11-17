@@ -20,7 +20,7 @@ public class EjemploExcepciones {
 
         } catch (DivisionPorCeroException ae){
             System.out.println("ERROR - aritmético: " + ae.getMessage());
-            main(args);
+            //main(args);
         } catch(NumberFormatException nfe) {
             System.out.println("ERROR - formato ingresado inválido " + nfe.getMessage());
             main(args);

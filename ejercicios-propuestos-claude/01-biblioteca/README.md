@@ -58,38 +58,33 @@ Primitivos y wrappers, `String`/`StringBuilder`, `Calendar`, arreglos y matrices
 
 ## Pendientes y avance
 
-Actualizado: 2026-11-12
+Actualizado: 2026-11-17
 
-### Corregir en el modelo (antes de los repos)
-- [x] `Prestamo(Socio, LocalDate)`: usa `this.fechaFinalPrestamo` al calcular `diasPrestamo`; hoy usa el parámetro, que puede ser `null`, y lanza NPE.
-- [x] Decidir si un `LocalDate` null debe lanzar error en lugar de asumir 30 días en silencio.
-- [x] Opcional: validar los días antes de `super(++ultimoId)` también en el constructor de `LocalDate`, para no gastar ids.
-- [x] Hacer `Persona` pública.
-- [x] Validar que `socio` no sea `null` en los constructores de `Prestamo`.
+**Dónde nos quedamos:** ejercicio en pausa después del paso 7. Lo siguiente es el paso 8 (`Estante` y la matriz). Después vienen el `Main` final, el reporte, las excepciones (Sec23) y, al final, el Builder recursivo.
 
-### Repositorios
-- [ ] `CrudRepositorio<T>`: listar, porId, crear, editar, eliminar.
-- [ ] `OrdenableRepositorio`, `PaginableRepositorio`, `ContableRepositorio`, enum `Direccion` (ASC/DESC) y la interfaz que las agrupa. Reutilizar lo de `poo_interfaces_repository`.
-- [ ] `AbstractaListRepositorio<T extends BaseEntity>`.
-- [ ] `MaterialRepositorio` y `SocioRepositorio`, con `comparar()` por título, año o id.
-- [ ] `PrestamoRepositorio`.
-- [ ] Servicio (`BibliotecaServicio`) que coordine prestar, devolver y renovar usando los repos.
-- [ ] Regla de disponibilidad: un material no puede estar en dos préstamos activos a la vez.
-- [ ] Decidir si el límite del socio se calcula contando préstamos activos en el repo o se mantiene el contador `prestamosRegistrados`.
-- [ ] Método genérico `<T extends Comparable<T>> T masAntiguo(T a, T b, T c)`.
-- [ ] `imprimirTodo(List<? extends Material>)` con wildcard.
+### Hecho
+- [x] Modelo corregido: ids consecutivos por tipo, validaciones de `null` y de rangos en `Prestamo`, `Persona` pública, límite de días y de renovaciones centralizados en `Prestamo`.
+- [x] Paso 1: interfaz `Copiable<T>` y constructores de copia en `Persona`, `Socio` y `SocioPremium`.
+- [x] Paso 2: `AbstractaRepositorio<T extends BaseEntity & Copiable<T>>` guarda y entrega copias; `buscarOriginal` para uso interno.
+- [x] Paso 3: `MaterialRepositorio`, `copiar()` y `actualizarDesde` en `Material`, `Libro`, `Revista` y `Dvd`.
+- [x] Paso 4: se eliminó el contador de `Socio`; el límite se mide por préstamo.
+- [x] Paso 5: `Prestamo` copiable, `actualizarDesde` y `PrestamoRepositorio`.
+- [x] Paso 6: `BibliotecaServicio` con `prestar`, `devolver` y `renovar`. El cupo del socio se calcula sumando los materiales de sus préstamos activos, y se valida la disponibilidad del material. `Revista` y `Dvd` no son `Prestable`, y el servicio y `Prestamo.addMaterial` los rechazan.
+- [x] Paso 7: `Utilidades.masAntiguo` (con `Comparable<? super T>`) e `imprimirTodo` (con `? extends Material`), en el paquete `util`.
 
-### Después de los repos
-- [ ] `Estante<T extends Material>` (Iterable, capacidad máxima) y la matriz de estantes con búsqueda por título.
-- [ ] `Main` final: 8 o más materiales y 3 socios; listar, paginar y ordenar; prestar y devolver; `instanceof` con `SocioPremium`; reporte con `String.format`.
-- [ ] Reporte: préstamos vencidos (`estaVencido()`) y total por género.
+### Pendiente
+- [ ] **Paso 8:** `Estante<T extends Material>` (Iterable, capacidad máxima, `agregar` devuelve `boolean`) y una clase `Almacen` con `Estante<?>[][]` (pasillos por niveles), con colocación validada y búsqueda de un material por título que devuelva su pasillo y nivel.
+- [ ] **`Main` final:** 8 o más materiales y 3 socios; listar, paginar y ordenar; prestar, devolver y renovar con el servicio; `instanceof` para distinguir `SocioPremium`; reporte con `String.format`.
+- [ ] **Reporte:** préstamos vencidos (`estaVencido()`) y total por género.
+- [ ] Decidir si `Material` tiene `diasPrestamo()` abstracto (días máximos por tipo de material).
+- [ ] Decidir si se conserva `Libro.prestar(...)` de la interfaz `Prestable`; el servicio ya no lo usa.
 
-### Excepciones (Sec23, tras los repos)
-- [ ] Cambiar los `false` de `Prestamo` por excepciones: `IllegalArgumentException` (argumentos inválidos) e `IllegalStateException` (estado inválido).
-- [ ] Excepciones propias: `LimitePrestamosException`, `MaterialNoDisponibleException`, `MaterialNoEncontradoException`, `RangoInvalidoException`, `DevolucionIncompletaException`.
-- [ ] `Libro.prestar` deja de devolver `null`.
+### Excepciones (Sec23)
+- [ ] Reemplazar los `false` y `null` de `Prestamo` (`addMaterial`, `extender`, `devolver`) por `IllegalArgumentException` (argumento inválido) e `IllegalStateException` (estado inválido).
+- [ ] Excepciones propias para las reglas de negocio de `BibliotecaServicio`: `LimitePrestamosException`, `MaterialNoDisponibleException`, `MaterialNoEncontradoException`, `RangoInvalidoException`, `DevolucionIncompletaException`.
+- [ ] Repositorios: `crearRegistro(null)`, `comparar` con un campo inexistente y `obtenerRegistros(pagina, n)` con valores inválidos.
+- [ ] `numeroSocio` único: rechazar duplicados en `SocioRepositorio.crearRegistro`.
 - [ ] `try/catch/finally` en el `Main`.
 
 ### Al final
 - [ ] Builder con genéricos recursivos (`Material`, `Libro`, `Revista`, `Dvd`), paso a paso, partiendo de `Mamifero`.
-- [ ] Decidir si `Material` tiene `diasPrestamo()` abstracto (días máximos por tipo) y si `Revista`/`Dvd` serán `Prestable`/`Renovable`.
