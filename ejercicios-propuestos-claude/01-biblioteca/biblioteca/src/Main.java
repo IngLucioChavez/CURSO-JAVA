@@ -1,24 +1,14 @@
-import modelo.Prestamo;
-import modelo.materiales.Dvd;
-import modelo.materiales.Genero;
-import modelo.materiales.Libro;
-import modelo.materiales.Material;
-import modelo.personas.Persona;
-import modelo.personas.Socio;
-import repositorio.MaterialRepositorio;
-import repositorio.PrestamoRepositorio;
-import repositorio.SocioRepositorio;
-import repositorio.interfaces.GeneralRepositorioInt;
-import servicios.BibliotecaServicio;
+import modelo.materiales.*;
+import util.Utilidades;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Main{
 
     void main(String[] args) {
 
+        /*
         Socio s1 = new Socio("0001","lucio","chavez","garcia");
         Socio s2 = new Socio("0002","AAAA","AAAA","AAAA");
         Material l1 = new Libro("libro1",2025,Genero.CIENCIA,100);
@@ -56,8 +46,21 @@ public class Main{
 
         materialRepo.crearRegistro(new Dvd("Cosmos", 1980, Genero.COSMOLOGIA, 12));
         System.out.println(biblioteca.prestar(1, List.of(6), 5L));   // null
+         */
 
+        Libro a = new Libro("A", 2020, Genero.CIENCIA, 10);
+        Libro b = new Libro("B", 1990, Genero.CIENCIA, 10);
+        Libro c = new Libro("C", 2005, Genero.CIENCIA, 10);
 
+        Libro viejo = Utilidades.masAntiguo(a, b, c);          // B (1990)
+        System.out.println(viejo.getTitulo());
+
+        Material mixto = Utilidades.masAntiguo(a, new Revista("R", 1980, Genero.CIENCIA, 5), new Dvd("D", 2001, Genero.CIENCIA, 3));
+        System.out.println(mixto.getTitulo());                 // R (1980)
+
+        Utilidades.imprimirTodo(List.of(a, b, c));             // una List<Libro>
+        List<Material> materiales = new ArrayList<>(List.of(a, b));
+        Utilidades.imprimirTodo(materiales);                   // una List<Material>
 
     }
 
