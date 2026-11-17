@@ -8,23 +8,29 @@ public class EjemploExcepciones {
     static void main(String[] args) {
 
         Calculadora cal = new Calculadora();
-        String valor = JOptionPane.showInputDialog("Ingrese valor: ");
         int divisor;
         double division;
+        boolean repetir = true;
 
-        try {
+        do{
+            String valor = JOptionPane.showInputDialog("Ingrese valor: ");
 
-            divisor = Integer.parseInt(valor);
-            division = cal.dividir(10,divisor);
-            System.out.println(division);
+            try {
 
-        } catch (DivisionPorCeroException ae){
-            System.out.println("ERROR - aritmético: " + ae.getMessage());
-            main(args);
-        } catch(NumberFormatException nfe) {
-            System.out.println("ERROR - formato ingresado inválido " + nfe.getMessage());
-            main(args);
-        }
+                divisor = Integer.parseInt(valor);
+                division = cal.dividir(10,divisor);
+                System.out.println(division);
+                repetir = false;
+
+            } catch (DivisionPorCeroException ae){
+                System.out.println("ERROR - aritmético: " + ae.getMessage());
+                //main(args);
+            } catch(NumberFormatException nfe) {
+                System.out.println("ERROR - formato ingresado inválido " + nfe.getMessage());
+                //main(args);
+            }
+        } while(repetir);
+
 
         System.out.println("continuando ejecución");
 
