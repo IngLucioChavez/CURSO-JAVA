@@ -1,5 +1,6 @@
 package modelo;
 
+import modelo.interfaces.Copiable;
 import modelo.materiales.Material;
 import modelo.personas.Socio;
 
@@ -11,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Prestamo extends BaseEntity {
+public class Prestamo extends BaseEntity implements Copiable<Prestamo> {
 
     private List<Material> materiales;
     private Socio socio;
@@ -19,9 +20,10 @@ public class Prestamo extends BaseEntity {
     private LocalDate fechaFinalPrestamo;
     private LocalDate fechaDevolucion;
     private Long diasPrestamo;
+    private int renovaciones;
+
     private static final DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static int ultimoId;
-    private int renovaciones;
     private static final int LIMITE_RENOVACIONES = 3;
     public static final long MAX_DIAS_PRESTAMO = 30;
     public static final long MAX_DIAS_EXTENSION = 3;
@@ -59,29 +61,50 @@ public class Prestamo extends BaseEntity {
         this.materiales = new ArrayList<>();
     }
 
+    protected Prestamo(Prestamo otro){
+        super(otro.getId());
+        this.fechaFinalPrestamo = otro.fechaFinalPrestamo;
+        this.fechaInicialPrestamo = otro.fechaInicialPrestamo;
+        this.diasPrestamo = otro.diasPrestamo;
+        this.socio = otro.socio.copiar();
+        this.fechaDevolucion = otro.fechaDevolucion;
+        this.renovaciones = otro.renovaciones;
+        this.materiales = new ArrayList<>();
+
+        for(Material m:otro.materiales){
+            materiales.add(m.copiar());
+        }
+    }
+
     public Socio getSocio() {
-        return socio;
+        return socio.copiar();
     }
 
     public boolean addMaterial(Material material){
 
         if(material == null || fechaDevolucion != null || materiales.contains(material))
             return false;
-        if(limiteAlcanzado(socio))
+        if(limiteAlcanzado())
             return false;
 
-        materiales.add(material);
-        socio.addNumeroPrestamos();
+        materiales.add(material.copiar());
         return true;
 
     }
 
     public List<Material> getMateriales() {
-        return List.copyOf(materiales);
+
+        List<Material> materialesCopia = new ArrayList<>();
+
+        for(Material m:materiales){
+            materialesCopia.add(m.copiar());
+        }
+
+        return materialesCopia;
     }
 
-    public static boolean limiteAlcanzado(Socio socio){
-        return socio.getPrestamosRegistrados() >= socio.getLimitePrestamos();
+    public boolean limiteAlcanzado(){
+        return materiales.size() >= socio.getLimitePrestamos();
     }
 
     public boolean extender(Long dias){
@@ -115,8 +138,6 @@ public class Prestamo extends BaseEntity {
             return false;
 
         fechaDevolucion = LocalDate.now();
-        socio.disNumeroPrestamos(materiales.size());
-
         return true;
 
     }
@@ -128,6 +149,34 @@ public class Prestamo extends BaseEntity {
     private static void validarDiasPrestamo(Long diasPrestamo){
         if( diasPrestamo == null || diasPrestamo < 1 || diasPrestamo > MAX_DIAS_PRESTAMO )
             throw new IllegalArgumentException("los días de prestamo deben estar entre 1 y " + MAX_DIAS_PRESTAMO);
+    }
+
+    public void actualizarDesde(Prestamo otro){
+        this.fechaFinalPrestamo = otro.fechaFinalPrestamo;
+        this.fechaDevolucion = otro.fechaDevolucion;
+        this.renovaciones = otro.renovaciones;
+        this.diasPrestamo = otro.diasPrestamo;
+
+        this.materiales = new ArrayList<>();
+        for(Material m: otro.materiales){
+            materiales.add(m.copiar());
+        }
+    }
+
+    public LocalDate getFechaInicialPrestamo() {
+        return fechaInicialPrestamo;
+    }
+
+    public LocalDate getFechaFinalPrestamo() {
+        return fechaFinalPrestamo;
+    }
+
+    public LocalDate getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
+    public Long getDiasPrestamo() {
+        return diasPrestamo;
     }
 
     @Override
@@ -155,4 +204,8 @@ public class Prestamo extends BaseEntity {
 
     }
 
+    @Override
+    public Prestamo copiar() {
+        return new Prestamo(this);
+    }
 }
