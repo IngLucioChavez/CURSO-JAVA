@@ -5,9 +5,6 @@ import modelo.interfaces.Prestable;
 import modelo.interfaces.Renovable;
 import modelo.materiales.Material;
 import modelo.personas.Socio;
-import repositorio.MaterialRepositorio;
-import repositorio.PrestamoRepositorio;
-import repositorio.SocioRepositorio;
 import repositorio.interfaces.GeneralRepositorioInt;
 
 import java.util.Collections;
@@ -15,9 +12,9 @@ import java.util.List;
 
 public class BibliotecaServicio {
 
-    GeneralRepositorioInt<Socio> sociosRepo;
-    GeneralRepositorioInt<Prestamo> prestamosRepo;
-    GeneralRepositorioInt<Material> materialesRepo;
+    private final GeneralRepositorioInt<Socio> sociosRepo;
+    private final GeneralRepositorioInt<Prestamo> prestamosRepo;
+    private final GeneralRepositorioInt<Material> materialesRepo;
 
     public BibliotecaServicio(GeneralRepositorioInt<Socio> sociosRepo, GeneralRepositorioInt<Prestamo> prestamosRepo, GeneralRepositorioInt<Material> materialesRepo){
         this.sociosRepo = sociosRepo;
@@ -63,15 +60,11 @@ public class BibliotecaServicio {
     public Prestamo prestar(int socioId, List<Integer> materialesIds, Long dias){
 
         //existencia de socio
-        boolean existeSocio = false;
-        for(Socio s:sociosRepo.obtenerRegistros()){
-            if( s.getId().equals(socioId) ){
-                existeSocio = true;
-                break;
-            }
-        }
+        Socio socio = sociosRepo.obtenerRegistroPorId(socioId);
+        if( socio == null )
+            return null;
 
-        if( !existeSocio )
+        if( materialesIds == null || materialesIds.size() <= 0 )
             return null;
 
         //validar que los ids de materiales no esten repetidos
@@ -82,20 +75,21 @@ public class BibliotecaServicio {
 
         //validar que los ids de materiales sean existentes y disponibles
         for(Integer idMaterial: materialesIds){
+            Material material = materialesRepo.obtenerRegistroPorId(idMaterial);
             //existencia de material
-            boolean existe = false;
-            for(Material material:materialesRepo.obtenerRegistros()){
-                if( material.getId().equals(idMaterial) )
-                    existe = true;
-            }
-            if( !existe ) return null;
+            if( material == null )
+                return null;
 
+            if( !(material instanceof Prestable) )
+                return null;
             //disponibilidad de material
-            if( !materialDisponible(idMaterial) ) return null;
+            if( !materialDisponible(idMaterial) )
+                return null;
+
+
         }
 
         //verificar que el socio no exceda el límite de préstamos con respecto a los que ya tiene y esta ingresando
-        Socio socio = sociosRepo.obtenerRegistroPorId(socioId);
         if( (materialesPrestados(socioId) + materialesIds.size()) > socio.getLimitePrestamos() )
             return null;
 
@@ -106,7 +100,8 @@ public class BibliotecaServicio {
 
         prestamosRepo.crearRegistro(prestamo);
 
-        return prestamo;
+        // regresar la copia del objeto guardado en el repo no el objeto creado en este metodo
+        return prestamosRepo.obtenerRegistroPorId(prestamo.getId());
     }
 
     public boolean devolver(int prestamoId){
