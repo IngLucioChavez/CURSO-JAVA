@@ -3,7 +3,7 @@ package modelo.materiales;
 import modelo.BaseEntity;
 import modelo.interfaces.Copiable;
 
-public abstract class Material extends BaseEntity implements Copiable<Material> {
+public abstract class Material extends BaseEntity implements Copiable<Material>,Comparable<Material> {
 
     protected String titulo;
     protected Integer anio;
@@ -63,5 +63,10 @@ public abstract class Material extends BaseEntity implements Copiable<Material> 
         texto.append(String.format("Genero: %s\n",genero));
 
         return texto.toString();
+    }
+
+    @Override
+    public int compareTo(Material o) {
+        return anio.compareTo(o.anio);
     }
 }
