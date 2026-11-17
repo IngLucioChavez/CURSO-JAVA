@@ -51,9 +51,6 @@ public class Libro extends Material implements Imprimible, Prestable, Renovable 
     @Override
     public Prestamo prestar(Socio persona, LocalDate fechaFinalPrestamo) {
 
-        if(Prestamo.limiteAlcanzado(persona))
-            return null;
-
         Prestamo prestamo = new Prestamo(persona,fechaFinalPrestamo);
         prestamo.addMaterial(this);
 
@@ -63,9 +60,6 @@ public class Libro extends Material implements Imprimible, Prestable, Renovable 
 
     @Override
     public Prestamo prestar(Socio persona, Long diasPrestamo) {
-
-        if(Prestamo.limiteAlcanzado(persona))
-            return null;
 
         Prestamo prestamo = new Prestamo(persona,diasPrestamo);
         prestamo.addMaterial(this);
