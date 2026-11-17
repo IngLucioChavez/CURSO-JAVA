@@ -2,6 +2,8 @@ package org.lucio.poointerfaces.repositorio;
 
 import org.lucio.poointerfaces.modelo.BaseEntity;
 import org.lucio.poointerfaces.modelo.Cliente;
+import org.lucio.poointerfaces.repositorio.excepciones.EscrituraDatoException;
+import org.lucio.poointerfaces.repositorio.excepciones.LecturaDatoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,11 @@ public abstract class AbstractaListRepositorio<T extends BaseEntity>
     }
 
     @Override
-    public T porId(Integer id) {
+    public T porId(Integer id) throws LecturaDatoException {
+
+        if( id == null || id <= 0 )
+            throw new LecturaDatoException("id inválido debe ser mayor a 0");
+
         T c = null;
         for(T cli: dataSource){
             if( cli.getId() != null && cli.getId().equals(id) ){
@@ -24,11 +30,15 @@ public abstract class AbstractaListRepositorio<T extends BaseEntity>
                 break;
             }
         }
+
+        if( c == null )
+            throw new LecturaDatoException("No existe registro con id %s".formatted(id));
+
         return c;
     }
 
     @Override
-    public void eliminar(Integer id) {
+    public void eliminar(Integer id) throws LecturaDatoException{
         T c = porId(id);
         dataSource.remove(c);
     }
@@ -39,7 +49,11 @@ public abstract class AbstractaListRepositorio<T extends BaseEntity>
     }
 
     @Override
-    public void crear(T t) {
+    public void crear(T t) throws EscrituraDatoException{
+
+        if( t == null )
+            throw new EscrituraDatoException("objeto nulo imposible crear");
+
         this.dataSource.add(t);
     }
 

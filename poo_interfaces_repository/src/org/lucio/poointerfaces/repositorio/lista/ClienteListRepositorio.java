@@ -3,6 +3,7 @@ package org.lucio.poointerfaces.repositorio.lista;
 import org.lucio.poointerfaces.modelo.Cliente;
 import org.lucio.poointerfaces.repositorio.AbstractaListRepositorio;
 import org.lucio.poointerfaces.repositorio.Direccion;
+import org.lucio.poointerfaces.repositorio.excepciones.LecturaDatoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public class ClienteListRepositorio
         extends AbstractaListRepositorio<Cliente> {
 
     @Override
-    public void editar(Cliente cliente) {
+    public void editar(Cliente cliente) throws LecturaDatoException {
         Cliente c = this.porId(cliente.getId());
         c.setNombre(cliente.getNombre());
         c.setApellido(cliente.getApellido());
@@ -24,28 +25,25 @@ public class ClienteListRepositorio
 
         // FORMA DE LAMBDA
         listaOrdenada.sort((a, b) -> {
-                int resultado = 0;
-                if (dir.getDireccion().equals(Direccion.ASC.getDireccion())) {
-                    resultado = comparar(campo,a,b);
-                } else if (dir.getDireccion().equals(Direccion.DESC.getDireccion())) {
-                    resultado = comparar(campo,b,a);
-                }
-                return resultado;
+            int resultado = 0;
+            if (dir.getDireccion().equals(Direccion.ASC.getDireccion())) {
+                resultado = comparar(campo, a, b);
+            } else if (dir.getDireccion().equals(Direccion.DESC.getDireccion())) {
+                resultado = comparar(campo, b, a);
+            }
+            return resultado;
         });
 
         return listaOrdenada;
     }
 
     @Override
-    public int comparar(String campo, Cliente a, Cliente b){
+    public int comparar(String campo, Cliente a, Cliente b) {
         int resultado = 0;
         switch (campo) {
-            case "id" ->
-                    resultado = a.getId().compareTo(b.getId());
-            case "nombre" ->
-                    resultado = a.getNombre().compareTo(b.getNombre());
-            case "apellido" ->
-                    resultado = a.getApellido().compareTo(b.getApellido());
+            case "id" -> resultado = a.getId().compareTo(b.getId());
+            case "nombre" -> resultado = a.getNombre().compareTo(b.getNombre());
+            case "apellido" -> resultado = a.getApellido().compareTo(b.getApellido());
         }
         return resultado;
     }

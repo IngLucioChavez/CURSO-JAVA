@@ -4,13 +4,14 @@ import org.lucio.poointerfaces.modelo.Cliente;
 import org.lucio.poointerfaces.modelo.Producto;
 import org.lucio.poointerfaces.repositorio.AbstractaListRepositorio;
 import org.lucio.poointerfaces.repositorio.Direccion;
+import org.lucio.poointerfaces.repositorio.excepciones.LecturaDatoException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoListRepositorio extends AbstractaListRepositorio<Producto> {
     @Override
-    public void editar(Producto producto) {
+    public void editar(Producto producto) throws LecturaDatoException {
         Producto p = this.porId(producto.getId());
         p.setDescripcion(producto.getDescripcion());
         p.setPrecio(producto.getPrecio());
