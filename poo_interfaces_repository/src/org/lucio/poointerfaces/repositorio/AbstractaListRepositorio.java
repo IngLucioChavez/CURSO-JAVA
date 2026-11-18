@@ -4,6 +4,7 @@ import org.lucio.poointerfaces.modelo.BaseEntity;
 import org.lucio.poointerfaces.modelo.Cliente;
 import org.lucio.poointerfaces.repositorio.excepciones.EscrituraDatoException;
 import org.lucio.poointerfaces.repositorio.excepciones.LecturaDatoException;
+import org.lucio.poointerfaces.repositorio.excepciones.RegistroDuplicadoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,9 @@ public abstract class AbstractaListRepositorio<T extends BaseEntity>
 
         if( t == null )
             throw new EscrituraDatoException("objeto nulo imposible crear");
+        // validación para no permitir registros duplicados
+        if( dataSource.contains(t) )
+            throw new RegistroDuplicadoException("el objeto con id %s ya existe".formatted(t.getId()));
 
         this.dataSource.add(t);
     }

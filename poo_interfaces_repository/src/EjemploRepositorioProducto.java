@@ -13,10 +13,12 @@ public class EjemploRepositorioProducto {
         try {
 
             OrdenablePaginableCrudRepositorio<Producto> repoProducto = new ProductoListRepositorio();
-            repoProducto.crear(null);
             repoProducto.crear(new Producto("Silla", 120.5D));
             repoProducto.crear(new Producto("Escritorio", 15.55D));
             repoProducto.crear(new Producto("Vaso", 1.5D));
+            Producto p1 = new Producto("plato",1.5D);
+            repoProducto.crear(p1);
+            repoProducto.crear(p1);
 
             System.out.println("-------Listar todo-----------");
             repoProducto.listar().forEach(System.out::println);
