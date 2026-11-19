@@ -1,5 +1,7 @@
 package org.lchavez.ejemplos.modelo;
 
+import java.util.Objects;
+
 public class Alumno implements Comparable<Alumno> {
 
     private String nombre;
@@ -38,11 +40,23 @@ public class Alumno implements Comparable<Alumno> {
     }
 
     //- se define el compareTo para que se compare a través del dato nota
-    //- de forma ASC
+    //- de forma ASC en el treeSet
     // NOTESE! se utiliza Integer.compare() porque un primitivo no pede implementar el método
-    // -- compateTo()
+    // -- compareTo()
     @Override
     public int compareTo(Alumno o) {
         return Integer.compare(nota,o.nota);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Alumno alumno)) return false;
+        if( this == object ) return true;
+        return nota == alumno.nota && Objects.equals(nombre, alumno.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre, nota);
     }
 }
