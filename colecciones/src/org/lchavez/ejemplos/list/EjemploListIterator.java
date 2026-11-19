@@ -1,8 +1,7 @@
-package org.lchavez.ejemplos.set;
+package org.lchavez.ejemplos.list;
 
 import org.lchavez.ejemplos.modelo.Alumno;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 

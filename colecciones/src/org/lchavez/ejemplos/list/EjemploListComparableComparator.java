@@ -1,4 +1,4 @@
-package org.lchavez.ejemplos.set;
+package org.lchavez.ejemplos.list;
 
 import org.lchavez.ejemplos.modelo.Alumno;
 
