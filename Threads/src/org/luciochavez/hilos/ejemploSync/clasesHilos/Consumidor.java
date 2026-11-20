@@ -17,11 +17,12 @@ public class Consumidor implements Runnable{
 
         for(int i =1; i<=10; i++){
             panaderia.consumirPan();
-            try {
+            // al quitar está sección obligamos a que un consumidor consuma hasta que este disponible un pan
+            /*try {
                 Thread.sleep(ThreadLocalRandom.current().nextInt(100,500));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
         }
 
     }
