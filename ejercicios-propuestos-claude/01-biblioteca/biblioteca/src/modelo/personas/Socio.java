@@ -26,7 +26,7 @@ public class Socio extends Persona implements Copiable<Socio> {
         return limitePrestamos;
     }
 
-    protected String tipo(){
+    public String getTipo(){
         return "Socio Estándar";
     }
 
@@ -34,7 +34,7 @@ public class Socio extends Persona implements Copiable<Socio> {
     public String toString() {
 
         StringBuilder text = new StringBuilder();
-        text.append(String.format("=== %s ===\n",this.tipo()));
+        text.append(String.format("=== %s ===\n",this.getTipo()));
         text.append(super.toString());
         text.append(String.format("Numero Socio: %s\n",numeroSocio));
 

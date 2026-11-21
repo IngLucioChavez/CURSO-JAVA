@@ -11,7 +11,7 @@ public class SocioPremium extends Socio{
     }
 
     @Override
-    protected String tipo() {
+    public String getTipo() {
         return "Socio Premium";
     }
 
