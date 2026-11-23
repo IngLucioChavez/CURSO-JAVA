@@ -1,5 +1,6 @@
 package servicios;
 
+import excepciones.*;
 import modelo.Prestamo;
 import modelo.interfaces.Prestable;
 import modelo.interfaces.Renovable;
@@ -16,7 +17,10 @@ public class BibliotecaServicio {
     private final GeneralRepositorioInt<Prestamo> prestamosRepo;
     private final GeneralRepositorioInt<Material> materialesRepo;
 
-    public BibliotecaServicio(GeneralRepositorioInt<Socio> sociosRepo, GeneralRepositorioInt<Prestamo> prestamosRepo, GeneralRepositorioInt<Material> materialesRepo){
+    public BibliotecaServicio(
+            GeneralRepositorioInt<Socio> sociosRepo, GeneralRepositorioInt<Prestamo> prestamosRepo,
+            GeneralRepositorioInt<Material> materialesRepo
+    ){
         this.sociosRepo = sociosRepo;
         this.prestamosRepo = prestamosRepo;
         this.materialesRepo = materialesRepo;
@@ -57,27 +61,27 @@ public class BibliotecaServicio {
         return true;
     }
 
-    public Prestamo prestar(int socioId, List<Integer> materialesIds, Long dias){
+    public Prestamo prestar(int socioId, List<Integer> materialesIds, Long dias)
+            throws BibliotecaException {
 
         // existencia de socio
         Socio socio = sociosRepo.obtenerRegistroPorId(socioId);
         if( socio == null )
-            return null;
+            throw new SocioNoEncontradoException(socioId);
         // no se permiten ids vacíos
         if( materialesIds == null || materialesIds.isEmpty() )
-            return null;
+            throw new ArgumentoException("ERROR - la lista de materiales es nula o vacía");
 
         //validar que los ids de materiales no esten repetidos
         if( hayIdsRepetidos(materialesIds) )
-            return null;
+            throw new ArgumentoException("ERROR - hay materiales repetidos en la lista");
 
         //validar que los ids de materiales sean existentes y disponibles
-        if( !materialesPrestablesYDisponibles(materialesIds) )
-            return null;
+        materialesPrestablesYDisponibles(materialesIds);
 
         //verificar que el socio no exceda el límite de préstamos con respecto a los que ya tiene y esta ingresando
         if( (materialesPrestados(socioId) + materialesIds.size()) > socio.getLimitePrestamos() )
-            return null;
+            throw new LimitePrestamosException(socio);
 
         Prestamo prestamo = new Prestamo(socio,dias);
         for(Integer idMaterial: materialesIds){
@@ -90,27 +94,25 @@ public class BibliotecaServicio {
         return prestamosRepo.obtenerRegistroPorId(prestamo.getId());
     }
 
-    public boolean devolver(int prestamoId){
+    public void devolver(int prestamoId)
+            throws BibliotecaException {
 
         Prestamo prestamo = prestamosRepo.obtenerRegistroPorId(prestamoId);
         if( prestamo == null )
-            return false;
+            throw new PrestamoNoEncontradoException(prestamoId);
 
-        if( !prestamo.devolver(prestamo.getMateriales()) )
-            return false;
+        prestamo.devolver(prestamo.getMateriales());
 
-        if( !prestamosRepo.modificarRegistro(prestamo) )
-            return false;
-
-        return true;
+        prestamosRepo.modificarRegistro(prestamo);
 
     }
 
-    public boolean renovar(int prestamoId, int materialId){
+    public void renovar(int prestamoId, int materialId)
+            throws BibliotecaException {
 
         Prestamo prestamo = prestamosRepo.obtenerRegistroPorId(prestamoId);
         if( prestamo == null )
-            return false;
+            throw new PrestamoNoEncontradoException(prestamoId);
 
         Material material = null;
         for(Material m:prestamo.getMateriales()){
@@ -121,33 +123,31 @@ public class BibliotecaServicio {
         }
 
         if(material == null )
-            return false;
+            throw new MaterialNoEncontradoException(materialId);
 
         if( !(material instanceof Renovable) )
-            return false;
+            throw new MaterialException("ERROR - el material no es renovable");
 
-        if( !(((Renovable) material).extenderDias(prestamo)) )
-            return false;
+        ((Renovable) material).extenderDias(prestamo);
 
-        return prestamosRepo.modificarRegistro(prestamo);
+        prestamosRepo.modificarRegistro(prestamo);
     }
 
     private boolean hayIdsRepetidos(List<Integer> ids){
         return new HashSet<>(ids).size() != ids.size();
     }
 
-    private boolean materialesPrestablesYDisponibles(List<Integer> ids){
+    private void materialesPrestablesYDisponibles(List<Integer> ids) throws MaterialNoDisponibleException, MaterialNoEncontradoException {
         for(Integer idMaterial: ids){
             Material material = materialesRepo.obtenerRegistroPorId(idMaterial);
             //existencia de material
+            if( material == null )
+                throw new MaterialNoEncontradoException(idMaterial);
             // material instanceof Prestable ya devuelve false cuando material es null
-            /*if( material == null )
-                return null;*/
             // que el material sea prestable y este disponible
             if( !(material instanceof Prestable) || !materialDisponible(idMaterial) )
-                return false;
+                throw new MaterialNoDisponibleException(material);
         }
-        return true;
     }
 
 

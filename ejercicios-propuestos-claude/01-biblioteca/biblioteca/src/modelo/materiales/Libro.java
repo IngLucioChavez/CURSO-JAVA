@@ -1,5 +1,9 @@
 package modelo.materiales;
 
+import excepciones.ArgumentoException;
+import excepciones.LimitePrestamosException;
+import excepciones.MaterialException;
+import excepciones.PrestamoException;
 import modelo.interfaces.Imprimible;
 import modelo.interfaces.Prestable;
 import modelo.interfaces.Renovable;
@@ -49,7 +53,7 @@ public class Libro extends Material implements Imprimible, Prestable, Renovable 
     }
 
     @Override
-    public Prestamo prestar(Socio persona, LocalDate fechaFinalPrestamo) {
+    public Prestamo prestar(Socio persona, LocalDate fechaFinalPrestamo) throws ArgumentoException, MaterialException, PrestamoException, LimitePrestamosException{
 
         Prestamo prestamo = new Prestamo(persona,fechaFinalPrestamo);
         prestamo.addMaterial(this);
@@ -59,7 +63,7 @@ public class Libro extends Material implements Imprimible, Prestable, Renovable 
     }
 
     @Override
-    public Prestamo prestar(Socio persona, Long diasPrestamo) {
+    public Prestamo prestar(Socio persona, Long diasPrestamo) throws ArgumentoException, MaterialException, PrestamoException, LimitePrestamosException {
 
         Prestamo prestamo = new Prestamo(persona,diasPrestamo);
         prestamo.addMaterial(this);

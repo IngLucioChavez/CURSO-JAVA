@@ -1,13 +1,15 @@
 package repositorio.interfaces;
 
+import excepciones.RepositorioException;
+
 import java.util.List;
 
 public interface CrudRepositorioInt<T> {
 
     List<T> obtenerRegistros();
     T obtenerRegistroPorId(int idRegistro);
-    boolean modificarRegistro(T obj);
-    boolean eliminarRegistro(int idRegistro);
-    boolean crearRegistro(T obj);
+    void modificarRegistro(T obj) throws RepositorioException;
+    boolean eliminarRegistro(int idRegistro) throws RepositorioException;
+    void crearRegistro(T obj) throws RepositorioException;
 
 }

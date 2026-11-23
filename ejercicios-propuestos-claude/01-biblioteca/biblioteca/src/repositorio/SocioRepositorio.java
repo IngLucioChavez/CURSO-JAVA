@@ -1,23 +1,23 @@
 package repositorio;
 
+import excepciones.RepositorioException;
 import modelo.personas.Socio;
 
 public class SocioRepositorio extends AbstractaRepositorio<Socio> {
 
     @Override
-    public boolean modificarRegistro(Socio obj) {
+    public void modificarRegistro(Socio obj) throws RepositorioException{
 
         Socio search = buscarOriginal(obj.getId());
 
         if( search == null)
-            return false;
+            throw new RepositorioException("ERROR - el socio referenciado no existe");
 
         search.setNombres(obj.getNombres());
         search.setAp(obj.getAp());
         search.setAm(obj.getAm());
         search.setEdad(obj.getEdad());
 
-        return true;
     }
 
     @Override

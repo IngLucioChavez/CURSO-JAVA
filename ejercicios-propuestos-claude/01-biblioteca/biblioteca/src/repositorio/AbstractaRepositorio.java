@@ -1,5 +1,6 @@
 package repositorio;
 
+import excepciones.RepositorioException;
 import modelo.BaseEntity;
 import repositorio.enumeraciones.FormasDeOrden;
 import modelo.interfaces.Copiable;
@@ -55,24 +56,23 @@ public abstract class AbstractaRepositorio<T extends BaseEntity & Copiable<T>> i
     }
 
     @Override
-    public boolean eliminarRegistro(int idRegistro) {
+    public boolean eliminarRegistro(int idRegistro) throws RepositorioException {
 
         T obj = buscarOriginal(idRegistro);
         if( obj == null )
-            return false;
+            throw new RepositorioException("ERROR - el objeto referenciado es inexistente");
         data.remove(obj);
         return true;
 
     }
 
     @Override
-    public boolean crearRegistro(T obj) {
+    public void crearRegistro(T obj) throws RepositorioException {
 
         if( data.contains(obj) || obj == null )
-            return false;
+            throw new RepositorioException("ERROR - el objeto referenciado es existente o es nulo");
         data.add(obj.copiar());
 
-        return true;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package modelo;
 
+import excepciones.*;
 import modelo.interfaces.Copiable;
 import modelo.interfaces.Prestable;
 import modelo.materiales.Material;
@@ -29,12 +30,12 @@ public class Prestamo extends BaseEntity implements Copiable<Prestamo> {
     public static final long MAX_DIAS_PRESTAMO = 30;
     public static final long MAX_DIAS_EXTENSION = 3;
 
-    public Prestamo(Socio socio, LocalDate fechaFinalPrestamo){
+    public Prestamo(Socio socio, LocalDate fechaFinalPrestamo) throws ArgumentoException{
 
         if(fechaFinalPrestamo == null)
-            throw new IllegalArgumentException("ERROR - la fecha en que se debe regresar el material es vacía");
+            throw new ArgumentoException("ERROR - la fecha en que se debe regresar el material es vacía");
         if(socio == null)
-            throw new IllegalArgumentException("ERROR - la referencia a socio no debe estar vacía");
+            throw new ArgumentoException("ERROR - la referencia a socio no debe estar vacía");
 
         long dias = ChronoUnit.DAYS.between(LocalDate.now(),fechaFinalPrestamo);
         validarDiasPrestamo(dias);
@@ -47,10 +48,10 @@ public class Prestamo extends BaseEntity implements Copiable<Prestamo> {
         this.materiales = new ArrayList<>();
     }
 
-    public Prestamo(Socio socio, Long diasPrestamo){
+    public Prestamo(Socio socio, Long diasPrestamo) throws ArgumentoException{
 
         if(socio == null)
-            throw new IllegalArgumentException("ERROR - la referencia a socio no debe estar vacía");
+            throw new ArgumentoException("ERROR - la referencia a socio no debe estar vacía");
 
         validarDiasPrestamo(diasPrestamo);
 
@@ -81,17 +82,21 @@ public class Prestamo extends BaseEntity implements Copiable<Prestamo> {
         return socio.copiar();
     }
 
-    public boolean addMaterial(Material material){
+    public void addMaterial(Material material)
+            throws ArgumentoException, MaterialException, LimitePrestamosException, PrestamoException{
 
-        if(material == null || fechaDevolucion != null || materiales.contains(material))
-            return false;
+        if( material == null)
+            throw new ArgumentoException("ERROR - referencia a material nula");
+        if( fechaDevolucion != null )
+            throw new PrestamoException("ERROR - el préstamo ya tiene fecha de devolución asignada");
+        if( materiales.contains(material))
+            throw new MaterialException("ERROR - ya está en la lista de materiales");
         if(limiteAlcanzado())
-            return false;
+            throw new LimitePrestamosException(socio);
         if( !(material instanceof Prestable) )
-            return false;
+            throw new MaterialException("ERROR - el material referenciado no es prestable");
 
         materiales.add(material.copiar());
-        return true;
 
     }
 
@@ -110,38 +115,39 @@ public class Prestamo extends BaseEntity implements Copiable<Prestamo> {
         return materiales.size() >= socio.getLimitePrestamos();
     }
 
-    public boolean extender(Long dias){
+    public void extender(Long dias) throws PrestamoException, ArgumentoException{
 
         if(fechaDevolucion != null || renovaciones >= LIMITE_RENOVACIONES)
-            return false;
+            throw new PrestamoException("ERROR - el préstamo ya tiene fecha de devolución o se ha alcanzado el número de renovaciones permitidas");
         if( dias == null || dias <= 0 || dias > MAX_DIAS_EXTENSION)
-            return false;
+            throw new ArgumentoException("ERROR - los días indicados no son validos o el valor es mayor a los días de extensión permitidos");
         if( LocalDate.now().isAfter(fechaFinalPrestamo) )
-            return false;
+            throw new PrestamoException("ERROR - la fecha actual es superior a la fecha del préstamo");
 
         fechaFinalPrestamo = fechaFinalPrestamo.plusDays(dias);
         diasPrestamo += dias;
         renovaciones++;
-        return true;
 
     }
 
-    public boolean devolver(List<Material> materialesDevueltos){
+    public void devolver(List<Material> materialesDevueltos)
+            throws PrestamoException, ArgumentoException, DevolucionIncompletaException{
 
-        if( fechaDevolucion != null || materialesDevueltos == null)
-            return false;
+        if( fechaDevolucion != null )
+            throw new PrestamoException("ERROR - el préstamo ya tiene fecha de devolución asignada");
+        if( materialesDevueltos == null)
+            throw new ArgumentoException("ERROR - los materiales a devolver son nulos");
         if( materiales.isEmpty() )
-            return false;
+            throw new PrestamoException("ERROR - el préstamo no tiene materiales registrados para devolver");
 
         //mismos materiales, sin importar el orden
         boolean mismosMateriales = materialesDevueltos.size() == materiales.size() &&
                 new HashSet<>(materialesDevueltos).equals(new HashSet<>(materiales));
 
         if( !mismosMateriales )
-            return false;
+            throw new DevolucionIncompletaException(this);
 
         fechaDevolucion = LocalDate.now();
-        return true;
 
     }
 
@@ -149,9 +155,9 @@ public class Prestamo extends BaseEntity implements Copiable<Prestamo> {
         return fechaDevolucion == null && fechaFinalPrestamo.isBefore(LocalDate.now());
     }
 
-    private static void validarDiasPrestamo(Long diasPrestamo){
+    private static void validarDiasPrestamo(Long diasPrestamo) throws DiasPrestamoException{
         if( diasPrestamo == null || diasPrestamo < 1 || diasPrestamo > MAX_DIAS_PRESTAMO )
-            throw new IllegalArgumentException("los días de prestamo deben estar entre 1 y " + MAX_DIAS_PRESTAMO);
+            throw new DiasPrestamoException(diasPrestamo);
     }
 
     public void actualizarDesde(Prestamo otro){
