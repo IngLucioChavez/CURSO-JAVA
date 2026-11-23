@@ -137,7 +137,7 @@ public class BibliotecaServicio {
         return new HashSet<>(ids).size() != ids.size();
     }
 
-    private void materialesPrestablesYDisponibles(List<Integer> ids) throws MaterialNoDisponibleException, MaterialNoEncontradoException {
+    private void materialesPrestablesYDisponibles(List<Integer> ids) throws MaterialNoDisponibleException, MaterialNoEncontradoException, RepositorioException {
         for(Integer idMaterial: ids){
             Material material = materialesRepo.obtenerRegistroPorId(idMaterial);
             //existencia de material

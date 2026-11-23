@@ -1,16 +1,17 @@
 package repositorio;
 
+import excepciones.PrestamoNoEncontradoException;
 import excepciones.RepositorioException;
 import modelo.Prestamo;
 
 public class PrestamoRepositorio extends AbstractaRepositorio<Prestamo>{
     @Override
-    public void modificarRegistro(Prestamo obj) throws RepositorioException {
+    public void modificarRegistro(Prestamo obj) throws PrestamoNoEncontradoException {
 
         Prestamo search = buscarOriginal(obj.getId());
 
         if( search == null )
-            throw new RepositorioException("ERROR - el préstamo referencia no existe");
+            throw new PrestamoNoEncontradoException(obj.getId());
 
         search.actualizarDesde(obj);
 

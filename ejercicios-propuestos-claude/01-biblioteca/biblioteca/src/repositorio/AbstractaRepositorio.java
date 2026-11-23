@@ -1,5 +1,6 @@
 package repositorio;
 
+import excepciones.RangoPaginacionException;
 import excepciones.RepositorioException;
 import modelo.BaseEntity;
 import repositorio.enumeraciones.FormasDeOrden;
@@ -51,7 +52,7 @@ public abstract class AbstractaRepositorio<T extends BaseEntity & Copiable<T>> i
     public T obtenerRegistroPorId(int idRegistro) {
 
         T original = buscarOriginal(idRegistro);
-        return original == null ? null : original.copiar();
+        return original == null ? null :  original.copiar();
 
     }
 
@@ -76,11 +77,11 @@ public abstract class AbstractaRepositorio<T extends BaseEntity & Copiable<T>> i
     }
 
     @Override
-    public List<T> obtenerRegistros(int pagina, int numRegistros) {
+    public List<T> obtenerRegistros(int pagina, int numRegistros) throws RangoPaginacionException {
         int desde = (pagina - 1) * numRegistros;
 
         if( pagina < 1 || numRegistros < 1 || desde > data.size() )
-            return List.of();
+            throw new RangoPaginacionException();
 
         int hasta = Math.min(desde + numRegistros, data.size());
 

@@ -1,5 +1,6 @@
 package repositorio;
 
+import excepciones.MaterialNoEncontradoException;
 import excepciones.RepositorioException;
 import modelo.materiales.Material;
 
@@ -7,12 +8,12 @@ public class MaterialRepositorio extends AbstractaRepositorio<Material>{
 
 
     @Override
-    public void modificarRegistro(Material obj) throws RepositorioException {
+    public void modificarRegistro(Material obj) throws RepositorioException, MaterialNoEncontradoException {
 
         Material search = buscarOriginal(obj.getId());
 
         if( search == null )
-            throw new RepositorioException("ERROR - el material especificado no es existente");
+            throw new MaterialNoEncontradoException(obj.getId());
         if( search.getClass() != obj.getClass() )
             throw new RepositorioException("ERROR - las clases son diferentes");
 

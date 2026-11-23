@@ -1,23 +1,38 @@
 package repositorio;
 
 import excepciones.RepositorioException;
+import excepciones.SocioNoEncontradoException;
 import modelo.personas.Socio;
 
 public class SocioRepositorio extends AbstractaRepositorio<Socio> {
 
     @Override
-    public void modificarRegistro(Socio obj) throws RepositorioException{
+    public void modificarRegistro(Socio obj) throws SocioNoEncontradoException {
 
         Socio search = buscarOriginal(obj.getId());
 
         if( search == null)
-            throw new RepositorioException("ERROR - el socio referenciado no existe");
+            throw new SocioNoEncontradoException(obj.getId());
 
         search.setNombres(obj.getNombres());
         search.setAp(obj.getAp());
         search.setAm(obj.getAm());
         search.setEdad(obj.getEdad());
 
+    }
+
+    @Override
+    public void crearRegistro(Socio obj) throws RepositorioException {
+
+        if( obj == null )
+            throw new RepositorioException("ERROR - el socio referenciado es nulo");
+
+        for(Socio s: data){
+            if( s.getNumeroSocio().equals(obj.getNumeroSocio()) )
+                throw new RepositorioException("ERROR - ya existe un socio con el número de socio referenciado");
+        }
+
+        super.crearRegistro(obj);
     }
 
     @Override

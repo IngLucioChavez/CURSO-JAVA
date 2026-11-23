@@ -58,19 +58,28 @@ Primitivos y wrappers, `String`/`StringBuilder`, `Calendar`, arreglos y matrices
 
 ## Pendientes y avance
 
-Actualizado: 2026-11-17
+Actualizado: 2026-11-23
 
-**Dónde nos quedamos:** ejercicio en pausa después del paso 7. Lo siguiente es el paso 8 (`Estante` y la matriz). Después vienen el `Main` final, el reporte, las excepciones (Sec23) y, al final, el Builder recursivo.
+**Dónde nos quedamos:** pasos 1 a 7 y Excepciones (Sec23) terminados. Lo siguiente es el paso 8 (`Estante` y la matriz), después el `Main` final con el reporte y, al final, el Builder recursivo.
 
 ### Hecho
-- [x] Modelo corregido: ids consecutivos por tipo, validaciones de `null` y de rangos en `Prestamo`, `Persona` pública, límite de días y de renovaciones centralizados en `Prestamo`.
+- [x] Modelo corregido: ids consecutivos por tipo, validaciones en `Prestamo`, `Persona` pública, límite de días y de renovaciones centralizados en `Prestamo`.
 - [x] Paso 1: interfaz `Copiable<T>` y constructores de copia en `Persona`, `Socio` y `SocioPremium`.
 - [x] Paso 2: `AbstractaRepositorio<T extends BaseEntity & Copiable<T>>` guarda y entrega copias; `buscarOriginal` para uso interno.
 - [x] Paso 3: `MaterialRepositorio`, `copiar()` y `actualizarDesde` en `Material`, `Libro`, `Revista` y `Dvd`.
 - [x] Paso 4: se eliminó el contador de `Socio`; el límite se mide por préstamo.
 - [x] Paso 5: `Prestamo` copiable, `actualizarDesde` y `PrestamoRepositorio`.
-- [x] Paso 6: `BibliotecaServicio` con `prestar`, `devolver` y `renovar`. El cupo del socio se calcula sumando los materiales de sus préstamos activos, y se valida la disponibilidad del material. `Revista` y `Dvd` no son `Prestable`, y el servicio y `Prestamo.addMaterial` los rechazan.
+- [x] Paso 6: `BibliotecaServicio` con `prestar`, `devolver` y `renovar`. El cupo del socio se calcula sumando los materiales de sus préstamos activos, y se valida la disponibilidad del material. `Revista` y `Dvd` no son `Prestable`.
 - [x] Paso 7: `Utilidades.masAntiguo` (con `Comparable<? super T>`) e `imprimirTodo` (con `? extends Material`), en el paquete `util`.
+- [x] `BibliotecaServicio.prestar` bajó de complejidad cognitiva 15 a unos 7 (extrae `hayIdsRepetidos` y la validación de materiales).
+
+### Excepciones (Sec23): hecho
+- [x] Jerarquía en el paquete `excepciones`: `BibliotecaException` (checked) y sus hijas `ArgumentoException` (con `DiasPrestamoException`), `MaterialException`, `PrestamoException`, `RepositorioException`, `SocioNoEncontradoException`, `MaterialNoEncontradoException`, `PrestamoNoEncontradoException`, `MaterialNoDisponibleException`, `LimitePrestamosException`, `DevolucionIncompletaException` y `RangoPaginacionException`.
+- [x] Regla de diseño: las "no encontrado" reciben el **id** (el objeto no existe); las de regla violada reciben el **objeto**. Argumento inválido → `ArgumentoException`; estado inválido → `PrestamoException`/`MaterialException`.
+- [x] `Prestamo`, `Prestable`, `Renovable` y `Libro` lanzan excepciones en lugar de devolver `false`/`null` (`addMaterial`, `extender`, `devolver` son `void`).
+- [x] `BibliotecaServicio.prestar`, `devolver` y `renovar` lanzan la excepción específica (`throws BibliotecaException`, `devolver` y `renovar` son `void`).
+- [x] Repositorios: `crearRegistro` rechaza `null` y duplicados; `SocioRepositorio` valida `numeroSocio` único (no con `equals`, que sigue siendo por id); `obtenerRegistros(pagina, n)` lanza `RangoPaginacionException`; `obtenerRegistroPorId` devuelve `null` si no existe y es el servicio quien decide si es error.
+- [x] `Main` con 18 pruebas de casos esperados (helper `probar` con interfaz funcional `Prueba` y `finally`); todas salen ✔.
 
 ### Pendiente
 - [ ] **Paso 8:** `Estante<T extends Material>` (Iterable, capacidad máxima, `agregar` devuelve `boolean`) y una clase `Almacen` con `Estante<?>[][]` (pasillos por niveles), con colocación validada y búsqueda de un material por título que devuelva su pasillo y nivel.
@@ -78,13 +87,7 @@ Actualizado: 2026-11-17
 - [ ] **Reporte:** préstamos vencidos (`estaVencido()`) y total por género.
 - [ ] Decidir si `Material` tiene `diasPrestamo()` abstracto (días máximos por tipo de material).
 - [ ] Decidir si se conserva `Libro.prestar(...)` de la interfaz `Prestable`; el servicio ya no lo usa.
-
-### Excepciones (Sec23)
-- [ ] Reemplazar los `false` y `null` de `Prestamo` (`addMaterial`, `extender`, `devolver`) por `IllegalArgumentException` (argumento inválido) e `IllegalStateException` (estado inválido).
-- [ ] Excepciones propias para las reglas de negocio de `BibliotecaServicio`: `LimitePrestamosException`, `MaterialNoDisponibleException`, `MaterialNoEncontradoException`, `RangoInvalidoException`, `DevolucionIncompletaException`.
-- [ ] Repositorios: `crearRegistro(null)`, `comparar` con un campo inexistente y `obtenerRegistros(pagina, n)` con valores inválidos.
-- [ ] `numeroSocio` único: rechazar duplicados en `SocioRepositorio.crearRegistro`.
-- [ ] `try/catch/finally` en el `Main`.
+- [ ] Opcional: `comparar` con un campo inexistente hoy devuelve 0; podría lanzar una excepción.
 
 ### Al final
 - [ ] Builder con genéricos recursivos (`Material`, `Libro`, `Revista`, `Dvd`), paso a paso, partiendo de `Mamifero`.

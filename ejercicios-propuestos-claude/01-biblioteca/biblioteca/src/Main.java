@@ -55,21 +55,26 @@ public class Main{
         probar("devolver préstamo 1",               null,                              () -> biblioteca.devolver(1));
         probar("devolver préstamo 1 otra vez",      PrestamoException.class,           () -> biblioteca.devolver(1));
         probar("volver a prestar 1,2 tras devolver", null,                             () -> biblioteca.prestar(1, List.of(1, 2), 5L));
+        probar("número socio duplicado",RepositorioException.class,()-> socios.crearRegistro(new Socio("0002","aaa","aaa","aa")));
+        probar("paginación con página 0", RangoPaginacionException.class,()-> socios.obtenerRegistros(0,10));
+        probar("paginación con página fuera de rango", RangoPaginacionException.class,()->materiales.obtenerRegistros(999,100));
 
     }
 
     //- este método implementa una prueba que debe lanzar una excepción y reporta si es la excepción esperada o no
     private void probar(String nombre, Class<? extends BibliotecaException> esperada, Prueba prueba) {
         Class<?> obtenida = null;
+        String mensaje = null;
         try {
             prueba.ejecutar();
         } catch (BibliotecaException e) {
             obtenida = e.getClass();
+            mensaje = e.getMessage();
         } finally {
             String marca = (obtenida == esperada) ? "✔" : "✘";
-            System.out.printf("%s %-45s esperada=%s obtenida=%s%n", marca, nombre,
+            System.out.printf("%s %-45s esperada=%s -- obtenida=%s -- mensaje= %s\n", marca, nombre,
                     esperada == null ? "ninguna" : esperada.getSimpleName(),
-                    obtenida == null ? "ninguna" : obtenida.getSimpleName());
+                    obtenida == null ? "ninguna" : obtenida.getSimpleName(),mensaje);
         }
     }
 
