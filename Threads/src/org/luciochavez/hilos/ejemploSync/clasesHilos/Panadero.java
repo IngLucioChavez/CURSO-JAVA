@@ -16,9 +16,9 @@ public class Panadero implements Runnable{
     public void run() {
 
         for(int i = 1; i <= 10; i++){
-            panaderia.hornear("pan num %s".formatted(i));
             try {
                 Thread.sleep(ThreadLocalRandom.current().nextInt(100,500));
+                panaderia.hornear("pan num %s".formatted(i));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

@@ -2,7 +2,7 @@ package org.luciochavez.hilos.ejemploSync.clasesHilos;
 
 import org.luciochavez.hilos.ejemploSync.Panaderia;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class Consumidor implements Runnable{
 
@@ -16,13 +16,12 @@ public class Consumidor implements Runnable{
     public void run() {
 
         for(int i =1; i<=10; i++){
-            panaderia.consumirPan();
-            // al quitar está sección obligamos a que un consumidor consuma hasta que este disponible un pan
-            /*try {
-                Thread.sleep(ThreadLocalRandom.current().nextInt(100,500));
+            try {
+                TimeUnit.SECONDS.sleep(3);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }*/
+            }
+            panaderia.consumirPan();
         }
 
     }
