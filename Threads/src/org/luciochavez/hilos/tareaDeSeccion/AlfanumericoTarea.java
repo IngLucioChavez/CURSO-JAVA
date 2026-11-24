@@ -7,50 +7,37 @@ import java.util.concurrent.TimeUnit;
 public class AlfanumericoTarea implements Runnable{
 
     private Tipo tipo;
-    private static final DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private String nombrehilo;
+    private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public AlfanumericoTarea(Tipo tipo){
+    public AlfanumericoTarea(Tipo tipo, String nombrehilo){
         this.tipo = tipo;
+        this.nombrehilo = nombrehilo;
     }
 
     @Override
     public void run() {
-        System.out.printf("%s - inicio de tarea...\n", LocalDateTime.now().format(formato));
+        Thread.currentThread().setName(nombrehilo);
+        System.out.printf("%s - inicio de tarea...\n", LocalDateTime.now().format(FORMATO));
 
-        switch (tipo){
-            case Tipo.LETRA -> {
-                for(int i = 65; i <= 90; i++){
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(500);
-                        System.out.printf("%s - %s\n",LocalDateTime.now().format(formato),(char)i);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+        try {
+            for (int i = tipo.getDesde(); i <= tipo.getHasta(); i++) {
+                TimeUnit.MILLISECONDS.sleep(tipo.getTiempo());
+                imprimir(tipo.formatear(i));
             }
-            case Tipo.LETRAMINUS -> {
-                for(int i = 97; i <= 122; i++){
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(600);
-                        System.out.printf("%s - %s\n",LocalDateTime.now().format(formato),(char)i);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            case Tipo.NUMERO -> {
-                for(int i=0; i<=10; i++){
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(700);
-                        System.out.printf("%s - %s\n",LocalDateTime.now().format(formato),i);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-            }
+            imprimir("fin de tarea " + tipo);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();   // restaura la bandera de interrupción
+            imprimir("tarea interrumpida " + tipo);
         }
-        System.out.printf("%s - fin de tarea...\n", LocalDateTime.now().format(formato));
+
+        System.out.printf("%s - fin de tarea...\n", LocalDateTime.now().format(FORMATO));
 
     }
+
+    private void imprimir(String mensaje) {
+        System.out.printf("%s [%s] - %s%n",
+                LocalDateTime.now().format(FORMATO), Thread.currentThread().getName(), mensaje);
+    }
+
 }

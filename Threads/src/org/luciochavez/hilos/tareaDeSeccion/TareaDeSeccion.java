@@ -1,58 +1,35 @@
 package org.luciochavez.hilos.tareaDeSeccion;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class TareaDeSeccion {
+
     public static void main(String[] args) throws InterruptedException {
 
-        try(ThreadPoolExecutor ejecutor =(ThreadPoolExecutor) Executors.newFixedThreadPool(3)){
+        try (ExecutorService ejecutor = Executors.newFixedThreadPool(3)) {
+            CompletionService<Void> servicio = new ExecutorCompletionService<>(ejecutor);
+            List<Future<Void>> futuros = new ArrayList<>();
 
-            AlfanumericoTarea tarea1 = new AlfanumericoTarea(Tipo.LETRA);
-            AlfanumericoTarea tarea2 = new AlfanumericoTarea(Tipo.NUMERO);
-            AlfanumericoTarea tarea3 = new AlfanumericoTarea(Tipo.LETRAMINUS);
+            //- un hilo por tipo: las 3 tareas corren al mismo tiempo
+            for (Tipo tipo : Tipo.values()) {
+                futuros.add(servicio.submit(new AlfanumericoTarea(tipo, "tarea-%s".formatted(tipo.toString())),null));
+            }
+            reporte(futuros);
 
-            //- definiendo tareas en paralelo donde 2 de ellas se ejecutarán en paralelo
-            Future<?> inspector1 = ejecutor.submit(tarea1);
-            Future<?> inspector2 = ejecutor.submit(tarea2);
-            Future<?> inspector3 = ejecutor.submit(tarea3);
+            for (int i = 0; i < futuros.size(); i++) {
+                servicio.take();          // bloquea (sin gastar CPU) hasta que termine la siguiente tarea
+                reporte(futuros);
+            }
+        }   // close() hace shutdown() y espera: ya no hace falta llamarlo a mano
+    }
 
-            reporteInspectores(inspector1,inspector2,inspector3);
-            ejecutor.shutdown();
-
-            Boolean ins1 = true, ins2 = true, ins3 = true;
-            do {
-
-                if(ins1 && inspector1.isDone()){
-                    reporteInspectores(inspector1,inspector2,inspector3);
-                    ins1 = false;
-                }
-                if(ins2 && inspector2.isDone()){
-                    reporteInspectores(inspector1,inspector2,inspector3);
-                    ins2 = false;
-                }
-                if(ins3 && inspector3.isDone()){
-                    reporteInspectores(inspector1,inspector2,inspector3);
-                    ins3 = false;
-                }
-
-            } while(!(inspector1.isDone() && inspector2.isDone() && inspector3.isDone()));
-
+    private static void reporte(List<Future<Void>> futuros) {
+        StringBuilder sb = new StringBuilder("======= inspectores =======\n");
+        for (int i = 0; i < futuros.size(); i++) {
+            sb.append("tarea").append(i + 1).append(" estatus: ").append(futuros.get(i).state()).append('\n');
         }
-
+        System.out.print(sb.append("===========================\n"));
     }
-
-    public static void reporteInspectores(Future<?> inspector1, Future<?> inspector2, Future<?> inspector3){
-        System.out.print(
-                """ 
-                ======= inspectores =======
-                tarea1 estatus: %s
-                tarea2 estatus: %s
-                tarea3 estatus: %s
-                ===========================
-                """.formatted(inspector1.state(),inspector2.state(),inspector3.state())
-        );
-    }
-
 }
