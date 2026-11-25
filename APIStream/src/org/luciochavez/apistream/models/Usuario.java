@@ -4,10 +4,21 @@ public class Usuario {
 
     private String nombres;
     private String apellidos;
+    private int id;
+    private static int ultimoId;
 
     public Usuario(String apellidos, String nombres) {
         this.apellidos = apellidos;
         this.nombres = nombres;
+        this.id = ++ultimoId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getApellidos() {

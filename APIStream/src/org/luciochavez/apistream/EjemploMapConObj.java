@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class EjemploMapConObj {
 
-    private static Usuario convertirNombreAUusuario(String nombre){
+    public static Usuario convertirNombreAUusuario(String nombre){
         String[] nom = nombre.trim().split(" ",2);
         if( nom.length < 2 ){
             throw new IllegalArgumentException("se esperaba Nombre Apellido en: " + nombre);
