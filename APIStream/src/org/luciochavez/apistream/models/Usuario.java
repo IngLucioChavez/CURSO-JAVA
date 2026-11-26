@@ -1,5 +1,7 @@
 package org.luciochavez.apistream.models;
 
+import java.util.Objects;
+
 public class Usuario {
 
     private String nombres;
@@ -35,6 +37,17 @@ public class Usuario {
 
     public void setNombres(String nombres) {
         this.nombres = nombres;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Usuario usuario)) return false;
+        return Objects.equals(nombres, usuario.nombres) && Objects.equals(apellidos, usuario.apellidos);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombres, apellidos);
     }
 
     @Override
