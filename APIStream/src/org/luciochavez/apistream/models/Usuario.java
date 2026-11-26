@@ -1,5 +1,7 @@
 package org.luciochavez.apistream.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Usuario {
@@ -8,11 +10,21 @@ public class Usuario {
     private String apellidos;
     private int id;
     private static int ultimoId;
+    private List<Factura> facturas;
 
     public Usuario(String apellidos, String nombres) {
         this.apellidos = apellidos;
         this.nombres = nombres;
         this.id = ++ultimoId;
+        this.facturas = new ArrayList<>();
+    }
+
+    public void addFactura(Factura factura){
+        facturas.add(factura);
+    }
+
+    public List<Factura> getFacturas(){
+        return facturas;
     }
 
     public int getId() {
