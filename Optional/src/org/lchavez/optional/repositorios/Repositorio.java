@@ -1,7 +1,5 @@
 package org.lchavez.optional.repositorios;
 
-import org.lchavez.optional.excepciones.NoExisteRegistroException;
-
 import java.util.Optional;
 
 /*
@@ -14,6 +12,6 @@ import java.util.Optional;
  */
 public interface Repositorio<T> {
 
-    Optional<T> buscar(String nombre) throws NoExisteRegistroException;
+    Optional<T> buscar(String nombre);
 
 }
