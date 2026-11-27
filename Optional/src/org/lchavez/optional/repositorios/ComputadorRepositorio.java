@@ -29,7 +29,7 @@ public class ComputadorRepositorio implements Repositorio<Computador>{
                 //- Con equalsIgnoreCase se resuelven ambos casos (con null regresa vacío).
                 //.filter(c->c.getNombre().equals(nombre.toUpperCase()))
                 .filter(c->c.getNombre().equalsIgnoreCase(nombre))
-                .peek(System.out::println) //- Hashes distintos en la salida: confirman que peek imprime el original y main la copia.
+                //.peek(System.out::println) //- Hashes distintos en la salida: confirman que peek imprime el original y main la copia.
                 .findFirst()
                 .map(c->c.copiaDe(c)) //- copia para no exponer el objeto interno
                 .or(Optional::empty);
