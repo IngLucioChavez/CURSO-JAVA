@@ -31,7 +31,7 @@ public class EjemploMetodosOrElse {
 
     public static Computador porDefecto(){
         System.out.println("por defecto!!");
-        return new Computador("MMXX","porDefecto");
+        return null;
     }
 
 }

@@ -1,38 +1,52 @@
 package org.lchavez.optional.repositorios;
 
 import org.lchavez.optional.models.Computador;
+import org.lchavez.optional.models.Fabricante;
+import org.lchavez.optional.models.Procesador;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ComputadorRepositorio implements Repositorio<Computador>{
+public class ComputadorRepositorio implements ComputadorRepositorioInterfaz{
 
     private final List<Computador> computadores;
 
     public ComputadorRepositorio() {
         this.computadores = new ArrayList<>();
-        computadores.add(new Computador("MMAA","AAAA"));
-        computadores.add(new Computador("MMBB","BBBB"));
-        computadores.add(new Computador("MMCC","CCCC"));
-        computadores.add(new Computador("MMDD","DDDD"));
+        computadores.add(new Computador("MMAA","AAAA",new Procesador("A1A",new Fabricante("CORPA"))));
+        computadores.add(new Computador("MMBB","BBBB",new Procesador("B1B",new Fabricante("CORPB"))));
+        computadores.add(new Computador("MMCC","CCCC",new Procesador("C1C",new Fabricante("CORPC"))));
+        computadores.add(new Computador("MMDD","DDDD",new Procesador("D1D",new Fabricante("CORPD"))));
     }
 
     @Override
     public Optional<Computador> buscar(String nombre){
-        // NOTESE!
-        //-- findFirst es una operación terminal de cortocircuito:
-        //-- el stream deja de recorrer al hallar la primera coincidencia.
-        //-- map solo se ejecuta si el Optional tiene valor.
+
         return computadores.stream()
-                //- nombre.toUpperCase() falla con null y solo funciona si el nombre guardado está en mayúsculas.
-                //- Con equalsIgnoreCase se resuelven ambos casos (con null regresa vacío).
-                //.filter(c->c.getNombre().equals(nombre.toUpperCase()))
                 .filter(c->c.getNombre().equalsIgnoreCase(nombre))
-                //.peek(System.out::println) //- Hashes distintos en la salida: confirman que peek imprime el original y main la copia.
                 .findFirst()
-                .map(c->c.copiaDe(c)) //- copia para no exponer el objeto interno
-                .or(Optional::empty);
+                .map(Computador::copia); //- copia para no exponer el objeto interno
 
     }
+
+    private Optional<Computador> buscarOriginal(int id){
+
+        return computadores.stream()
+                .filter(c->c.getId() == id)
+                .findFirst();
+
+    }
+
+    @Override
+    public boolean cambiarProcesador(int idComputador, Procesador procesador){
+
+        Optional<Computador> original = buscarOriginal(idComputador);
+
+        original.ifPresent(c->c.setProcesador(procesador));
+
+        return original.isPresent();
+
+    }
+
 }
